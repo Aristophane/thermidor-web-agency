@@ -1,6 +1,8 @@
 import "./LogoAnimated.css";
 import logo from "../assets/logo_thermidor_web_agency.png";
 import { useEffect, useState } from "react";
+import _ from "lodash";
+
 const calculateTopValue = (): string => {
   // Hauteur de la fenêtre (100vh)
   const maxScroll = window.innerHeight;
@@ -29,11 +31,11 @@ const LogoAnimated: React.FC = () => {
   const [topPosition, setTopPosition] = useState("35vh");
 
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScroll = _.throttle(() => {
       const scrollY = window.scrollY;
       setScrollY(scrollY);
       setTopPosition(calculateTopValue());
-    };
+    }, 2);
 
     window.addEventListener("scroll", handleScroll);
 
