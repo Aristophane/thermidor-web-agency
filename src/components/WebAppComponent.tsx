@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import './WebAppCreation.css'; // Import du fichier CSS
+import './WebAppComponent.css';
 
-const WebAppCreation: React.FC = () => {
+const WebAppComponent: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Animation d'apparition après le montage du composant
+    // Activation de l'animation après un léger délai
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 300);
@@ -13,17 +13,27 @@ const WebAppCreation: React.FC = () => {
   }, []);
 
   return (
-    <section className={`web-app-creation ${isVisible ? 'visible' : ''}`}>
-      <div className="content-wrapper">
-        <h2 className="title">Création Sites Web & Applications</h2>
-        <p className="description">
-          Notre équipe conçoit des sites web modernes et des applications sur-mesure pour répondre à vos besoins professionnels. 
-          Bénéficiez d'une expérience fluide et d'une interface élégante, pensée pour engager vos utilisateurs.
-        </p>
-        <button className="cta-button">En savoir plus</button>
+    <section className="web-app-creation">
+      <div className={`tiles-container ${isVisible ? 'visible' : ''}`}>
+        <div className="tile tile-1">
+          <h3>Sites Web sur-mesure</h3>
+          <p>Conception de sites web adaptés à vos besoins, avec un design unique et une navigation fluide.</p>
+        </div>
+        <div className="tile tile-2">
+          <h3>Applications Mobiles</h3>
+          <p>Développement d’applications performantes, optimisées pour tous les appareils et plateformes.</p>
+        </div>
+        <div className="tile tile-3">
+          <h3>Expérience Utilisateur</h3>
+          <p>Nous créons des interfaces intuitives et engageantes pour améliorer l’expérience utilisateur.</p>
+        </div>
+        <div className="tile tile-4">
+          <h3>Responsive Design</h3>
+          <p>Des solutions qui s’adaptent à tous les écrans, pour une expérience optimale sur mobile et desktop.</p>
+        </div>
       </div>
     </section>
   );
 };
 
-export default WebAppCreation;
+export default WebAppComponent;

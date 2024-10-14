@@ -3,6 +3,8 @@
   top: 2em;
   left: 2em;
   z-index: 999;
+  height: 100%;
+  background-color: #e4e1d0;
 }
 
 .burger-icon {
@@ -46,6 +48,8 @@
   display: flex;
   flex-direction: column;
   z-index: 999;
+  
+  background-color: #e4e1d0;
 }
 
 .menu-container.open .menu-items {

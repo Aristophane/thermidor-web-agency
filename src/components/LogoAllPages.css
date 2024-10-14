@@ -1,0 +1,82 @@
+.all-text-logo-container h1 {
+  font-family: "Bebas";
+  letter-spacing: -2px;
+  font-size: 2em;
+  margin: 0px;
+  line-height: 0.9em;
+}
+
+.all-text-logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.all-underneathOverlay-logo {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  height: 25vh;
+}
+
+.all-container-logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.3em;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  position: fixed;
+  z-index: 999;
+}
+
+.all-container-logo h1 {
+  opacity: 0;
+  position: relative;
+}
+
+.all-container-logo h1:first-of-type {
+  animation: slideInFromLeft 2s ease-in-out forwards;
+}
+
+.all-container-logo h1:last-of-type {
+  animation: slideInFromRight 2s ease-in-out forwards;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-30%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.all-container-logo img {
+  width: 5em;
+  animation: rotateLogo 2s ease-in-out;
+}
+
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(30%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes rotateLogo {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(540deg);
+  }
+}

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "./SlidingMenu.css";
+import { Link } from "react-router-dom";
 
-interface MenuItem {
+export interface MenuItem {
   label: string;
+  url?: string;
   submenu?: MenuItem[];
 }
 
@@ -16,6 +18,7 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ items }) => {
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+    setOpenSubmenus([]);
   };
 
   const toggleSubmenu = (index: number) => {
@@ -36,13 +39,23 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ items }) => {
       <div className="menu-items">
         {items.map((item, index) => (
           <div key={index} className="menu-item-wrapper">
-            <div
-              className="menu-item"
-              style={{ transitionDelay: `${index * 0.1}s` }}
-              onClick={() => item.submenu && toggleSubmenu(index)}
-            >
-              {item.label}
-            </div>
+            {item.url ? (
+              <Link
+                to={item.url}
+                className="menu-item"
+                style={{ transitionDelay: `${index * 0.1}s` }}
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <div
+                className="menu-item"
+                style={{ transitionDelay: `${index * 0.1}s` }}
+                onClick={() => item.submenu && toggleSubmenu(index)}
+              >
+                {item.label}
+              </div>
+            )}
             {item.submenu && (
               <div
                 className={`submenu-container ${
@@ -56,7 +69,13 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ items }) => {
                       className="submenu-item"
                       style={{ transitionDelay: `${(subIndex + 1) * 0.1}s` }}
                     >
-                      {subItem.label}
+                      {subItem.url ? (
+                        <Link to={subItem.url} className="submenu-link">
+                          {subItem.label}
+                        </Link>
+                      ) : (
+                        <div className="submenu-label">{subItem.label}</div>
+                      )}
                     </div>
                   ))}
                 </div>

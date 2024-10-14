@@ -1,61 +1,95 @@
 :root {
     --primary-color: #ff3238;
     --secondary-color: #e4e1d0;
-    --tertiary-color: #1a1a1a; /* Une troisième couleur pour du texte ou des détails */
+    --tertiary-color: #1a1a1a;
   }
   
   .web-app-creation {
     background-color: var(--secondary-color);
-    padding: 50px 20px;
+    padding: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    overflow: hidden;
+    position: relative;
   }
   
-  .web-app-creation.visible {
+  .tiles-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    max-width: 1200px;
+    opacity: 0;
+    transition: opacity 0.8s ease-out;
+    transform: translateY(20px);
+  }
+  
+  .tiles-container.visible {
     opacity: 1;
     transform: translateY(0);
   }
   
-  .content-wrapper {
-    text-align: center;
-    max-width: 800px;
+  .tile {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
   }
   
-  .title {
-    color: var(--primary-color);
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    font-weight: 700;
+  .tile:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
+  
+  .tile::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transition: transform 0.7s ease;
+  }
+  
+  .tile:hover::before {
+    transform: scale(1.5);
+  }
+  
+  .tile h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
     animation: fadeIn 1.2s ease-out;
   }
   
-  .description {
-    font-size: 1.2rem;
-    color: var(--tertiary-color);
-    margin-bottom: 30px;
+  .tile p {
+    font-size: 1.1rem;
     line-height: 1.6;
     animation: fadeIn 1.5s ease-out;
   }
   
-  .cta-button {
-    padding: 15px 30px;
-    font-size: 1rem;
-    background-color: var(--primary-color);
-    color: var(--secondary-color);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    animation: fadeIn 1.8s ease-out;
-    transition: background-color 0.3s ease;
+  /* Animation Parallaxe */
+  .tile:nth-child(1) {
+    transform: translateY(10px);
+  }
+  .tile:nth-child(2) {
+    transform: translateY(-10px);
+  }
+  .tile:nth-child(3) {
+    transform: translateY(15px);
+  }
+  .tile:nth-child(4) {
+    transform: translateY(-5px);
   }
   
-  .cta-button:hover {
-    background-color: var(--tertiary-color);
+  .tile:hover {
+    transform: translateY(0) !important;
   }
   
   @keyframes fadeIn {

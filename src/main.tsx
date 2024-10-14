@@ -1,14 +1,26 @@
 import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import Root from "./Root";
 import React from "react";
+import WebAppComponent from "./components/WebAppComponent";
+import LinksEnum from "./common/linksEnum";
+import { Layout } from "./components/Layout";
 import App from "./App";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <App />,
+      },
+      {
+        path: LinksEnum.SitesEtWebApps,
+        element: <WebAppComponent />,
+      },
+    ],
   },
 ]);
 
