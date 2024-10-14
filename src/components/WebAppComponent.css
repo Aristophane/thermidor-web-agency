@@ -1,0 +1,71 @@
+:root {
+    --primary-color: #ff3238;
+    --secondary-color: #e4e1d0;
+    --tertiary-color: #1a1a1a; /* Une troisième couleur pour du texte ou des détails */
+  }
+  
+  .web-app-creation {
+    background-color: var(--secondary-color);
+    padding: 50px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+  
+  .web-app-creation.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .content-wrapper {
+    text-align: center;
+    max-width: 800px;
+  }
+  
+  .title {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    animation: fadeIn 1.2s ease-out;
+  }
+  
+  .description {
+    font-size: 1.2rem;
+    color: var(--tertiary-color);
+    margin-bottom: 30px;
+    line-height: 1.6;
+    animation: fadeIn 1.5s ease-out;
+  }
+  
+  .cta-button {
+    padding: 15px 30px;
+    font-size: 1rem;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    animation: fadeIn 1.8s ease-out;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cta-button:hover {
+    background-color: var(--tertiary-color);
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

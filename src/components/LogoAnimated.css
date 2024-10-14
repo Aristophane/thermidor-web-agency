@@ -26,6 +26,13 @@ body {
     height: 100vh;
 }
 
+html, body {
+  height: 200vh; /* ou une valeur plus grande si tu veux plus de contenu */
+  margin: 0;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
 .container-logo {
   display: flex;
   flex-direction: row;
@@ -36,7 +43,8 @@ body {
   transition: transform 0.2s ease;
   transform: translateZ(0);
   position: fixed;
-  top:35vh;
+  height: 100vh;
+  
 }
 
 .container-logo h1 {

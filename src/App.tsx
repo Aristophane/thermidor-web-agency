@@ -1,8 +1,6 @@
 import "./App.css";
-import video from "../src/assets/logoAnim.mp4";
 import SlidingMenu from "./components/SlidingMenu";
 import styled from "styled-components";
-import VideoPlayer from "./components/VideoPlayer";
 import LogoAnimated from "./components/LogoAnimated";
 
 /*

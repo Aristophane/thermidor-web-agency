@@ -3,15 +3,13 @@ import logo from "../assets/logo_thermidor_web_agency.png";
 import { useEffect, useState } from "react";
 import _ from "lodash";
 
+// Valeurs de top en vh
+const topStart = 0;
+const topEnd = -44;
+
 const calculateTopValue = (): string => {
   // Hauteur de la fenêtre (100vh)
   const maxScroll = window.innerHeight;
-  console.log("MAX SCROLL: " + maxScroll);
-  console.log("SCROLL: " + window.scrollY);
-
-  // Valeurs de top en vh
-  const topStart = 35; // 35vh
-  const topEnd = 2; // 10vh
 
   // Scroll actuel
   const scrollY = window.scrollY;
@@ -28,19 +26,19 @@ const calculateTopValue = (): string => {
 
 const LogoAnimated: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
-  const [topPosition, setTopPosition] = useState("35vh");
+  const [topPosition, setTopPosition] = useState(`${topStart}vh`);
 
   useEffect(() => {
     const handleScroll = _.throttle(() => {
       const scrollY = window.scrollY;
       setScrollY(scrollY);
       setTopPosition(calculateTopValue());
-    }, 2);
+    }, 5);
 
     window.addEventListener("scroll", handleScroll);
 
     return () => {
-      // window.removeEventListener("scroll", handleScroll);
+       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
