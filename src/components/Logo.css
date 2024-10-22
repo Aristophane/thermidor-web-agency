@@ -23,7 +23,9 @@ body {
     width: 100vw;
     display: flex;
     justify-content: center;
-    height: 100vh;
+    /* background-color: #e4e1d0; */
+    height: 200vh;
+    position: fixed;
 }
 
 html, body {
@@ -42,9 +44,6 @@ html, body {
   justify-content: center;
   transition: transform 0.2s ease;
   transform: translateZ(0);
-  position: fixed;
-  height: 100vh;
-  
 }
 
 .container-logo h1 {

@@ -17,8 +17,12 @@
 .all-underneathOverlay-logo {
   width: 100vw;
   display: flex;
-  justify-content: center;
-  height: 25vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: stretch;
+  position: fixed;
+  z-index: 5;
+  background-color: #e4e1d0;
 }
 
 .all-container-logo {
@@ -28,7 +32,6 @@
   gap: 0.3em;
   justify-content: center;
   transition: transform 0.2s ease;
-  position: fixed;
   z-index: 999;
 }
 
