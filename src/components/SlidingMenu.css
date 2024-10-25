@@ -4,7 +4,6 @@
   left: 2em;
   z-index: 999;
   height: 100%;
-  background-color: #e4e1d0;
 }
 
 .burger-icon {
@@ -26,7 +25,7 @@
 
 .menu-container.open .bar:nth-child(1) {
   /* transform: rotate(45deg) translate(0, 0.9em); */
-  transform: rotate(0) scaleX(0.7)  translate(0, 0em);
+  transform: rotate(0) scaleX(0.7) translate(0, 0em);
 }
 
 .menu-container.open .bar:nth-child(2) {
@@ -43,22 +42,24 @@
   left: -100%;
   top: 50px;
   height: 100%;
-  width: 200px;
-  transition: left 0.5s ease;
   display: flex;
   flex-direction: column;
   z-index: 999;
-  
+  opacity: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease, left 0.5s ease;
   background-color: #e4e1d0;
+  width:12em;
 }
 
 .menu-container.open .menu-items {
-  left: 0;
+  left: -33px;
+  opacity: 1;
 }
 
 .menu-item {
   color: #ff3238;
   padding: 15px;
+  padding-left: 30px;
   font-size: 18px;
   opacity: 0;
   transform: translateX(-20px);
@@ -85,7 +86,7 @@
 
 .submenu {
   background-color: inherit;
-  padding-left: 20px;
+  padding-left: 3em;
 }
 
 .submenu-item {
@@ -94,11 +95,6 @@
   font-size: 16px;
   opacity: 0;
   transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.submenu-indicator {
-  float: right;
-  font-size: 12px;
 }
 
 .submenu-container.open .submenu-item {

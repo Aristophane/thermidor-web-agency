@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { menuItems } from "../common/menuItems";
 import SlidingMenu from "./SlidingMenu";
 import LogoAllPages from "./LogoAllPages";
+import ScrollToTop from "../ScrollToTop";
 
 export const Layout: React.FC = () => {
   const location = useLocation();
@@ -10,6 +11,7 @@ export const Layout: React.FC = () => {
   return (
     <div>
       <SlidingMenu items={menuItems} />
+      <ScrollToTop />
       {!isHomePage && <LogoAllPages />}
       <main>
         <Outlet />
