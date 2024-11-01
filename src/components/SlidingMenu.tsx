@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./SlidingMenu.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export interface MenuItem {
   label: string;
@@ -15,6 +15,12 @@ interface SlidingMenuProps {
 const SlidingMenu: React.FC<SlidingMenuProps> = ({ items }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [openSubmenus, setOpenSubmenus] = useState<number[]>([]);
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsOpen(false);
+    setOpenSubmenus([]);
+  }, [location]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);

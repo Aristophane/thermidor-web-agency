@@ -6,6 +6,12 @@ import WebAppComponent from "./components/WebAppComponent";
 import LinksEnum from "./common/linksEnum";
 import { Layout } from "./components/Layout";
 import App from "./App";
+import SiteWebSurMesure from "./components/SiteWebSurMesure";
+import ApplicationMobile from "./components/ApplicationsMobiles";
+import ResponsiveDesign from "./components/ResponsiveDesign";
+import ExperienceUtilisateur from "./components/ExperienceUtilisateur";
+import CampagneSEA from "./components/CampagnesSEA";
+import Branding from "./components/Branding";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +26,30 @@ const router = createBrowserRouter([
         path: LinksEnum.SitesEtWebApps,
         element: <WebAppComponent />,
       },
+      {
+        path: LinksEnum.SiteSurMesure,
+        element: <SiteWebSurMesure/>
+      },
+      {
+        path: LinksEnum.ExperienceUtilisateur,
+        element: <ExperienceUtilisateur/>
+      },
+      {
+        path: LinksEnum.ResponsiveDesign,
+        element: <ResponsiveDesign/>
+      },
+      {
+        path: LinksEnum.ApplicationsMobiles,
+        element: <ApplicationMobile/>
+      },
+      {
+        path: LinksEnum.CampagnesSEA,
+        element: <CampagneSEA/>
+      },
+      {
+        path: LinksEnum.Branding,
+        element: <Branding/>
+      }
     ],
   },
 ]);

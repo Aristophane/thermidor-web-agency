@@ -1,6 +1,7 @@
 import "./App.css";
 import styled from "styled-components";
 import LogoWelcomePage from "./components/LogoWelcomePage";
+import { Cta1, Cta2, Cta3 } from "./components/HomePageComponents";
 
 /*
 SERVICES
@@ -31,7 +32,7 @@ const ContentDiv = styled.div`
   width: 100%;
   align-items: center;
   background-color: white;
-  margin-top: 120vh;
+  margin-top: 130vh;
 `;
 
 function App() {
@@ -39,36 +40,9 @@ function App() {
     <>
       <LogoWelcomePage />
       <ContentDiv>
-        <p>TEST TEST 1</p>
-        <p>TEST TEST 2</p>
-        <p>TEST TEST 3</p>
-        <p>TEST TEST 4</p>
-        <p>TEST TEST 5</p>
-        <p>TEST TEST 6</p>
-        <p>TEST TEST 7</p>
-        <p>TEST TEST 8</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
-        <p>TEST TEST</p>
+        <Cta1 />
+        <Cta2 />
+        <Cta3 />
       </ContentDiv>
     </>
   );

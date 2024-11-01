@@ -6,9 +6,8 @@ export const menuItems : MenuItem[] = [
       label: "Services",
       submenu: [
         { label: "Sites Web & Applications", url: LinksEnum.SitesEtWebApps },
-        { label: "Campagnes Sponsorisées (SEA, Ads)", url: LinksEnum.SitesEtWebApps },
-        { label: "UX/UI Design", url: LinksEnum.SitesEtWebApps },
-        { label: "Branding & Identité Visuelle", url: LinksEnum.SitesEtWebApps },
+        { label: "Campagnes Sponsorisées (SEA, Ads)", url: LinksEnum.CampagnesSEA },
+        { label: "Branding & Identité Visuelle", url: LinksEnum.Branding },
       ],
     },
     { label: "Projets" },

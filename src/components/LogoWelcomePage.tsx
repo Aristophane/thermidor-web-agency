@@ -12,7 +12,7 @@ const LogoWelcomePage: React.FC = () => {
 
   useEffect(() => {
     controls.start({
-      height: `${Math.max(20, 100 - scrollY * 0.1)}vh`,
+      height: `${Math.max(15, 100 - scrollY * 0.2)}vh`,
       transition: { duration: 0.2 },
     });
   }, [scrollY, controls]);

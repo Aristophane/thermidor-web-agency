@@ -21,6 +21,7 @@
   align-items: center;
   justify-content: stretch;
   position: fixed;
+  top:0px;
   z-index: 5;
   background-color: #e4e1d0;
 }
