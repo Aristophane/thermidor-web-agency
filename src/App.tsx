@@ -1,7 +1,8 @@
 import "./App.css";
 import styled from "styled-components";
 import LogoWelcomePage from "./components/LogoWelcomePage";
-import { Cta1, Cta2, Cta3 } from "./components/HomePageComponents";
+import { Cta1, Cta2, Cta3, Cta4 } from "./components/HomePageComponents";
+import ClientCarousel from "./components/ClientCarousel";
 
 /*
 SERVICES

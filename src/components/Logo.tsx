@@ -1,6 +1,7 @@
 import "./Logo.css";
 import logo from "../assets/logo_thermidor_web_agency.png";
 import { motion, useScroll, useTransform } from "framer-motion";
+import AnimatedGradientText from "./GradientText";
 
 const Logo: React.FC = () => {
   const { scrollYProgress } = useScroll();
@@ -12,7 +13,7 @@ const Logo: React.FC = () => {
         <motion.div
           style={{
             scale,
-            backgroundColor: "#e4e1d0", // Couleur d'exemple,
+            backgroundColor: "#e4e1d0", 
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
@@ -21,8 +22,10 @@ const Logo: React.FC = () => {
         >
           <img src={logo} alt="Logo Thermidor Agence Web Lille" />
           <div className="text-logo-container">
-            <h1>THERMIDOR</h1>
-            <h1>AGENCE WEB</h1>
+            <AnimatedGradientText color="#ff3238">
+              <h1>THERMIDOR</h1>
+              <h1>AGENCE WEB</h1>
+            </AnimatedGradientText>
           </div>
         </motion.div>
       </div>

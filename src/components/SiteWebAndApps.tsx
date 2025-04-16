@@ -1,4 +1,3 @@
-import React from 'react';
 import './SiteWebAndApps.css'; // Optionnel : pour ajouter des styles spécifiques
 
 const SiteWebAndApps = () => {

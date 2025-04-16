@@ -85,17 +85,11 @@ const StepDescription = styled.div`
   padding:1em;
 `;
 
-// Styles pour les titres
-const Title = styled.h1`
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  text-align: center;
-`;
 
 const ProjectSteps: React.FC = () => {
   return (
     <>
-      <Title>Etapes de création de votre solution</Title>
+
       <StepContainer>
         {steps.map((step, index) => (
           <Circle key={index} index={index}>
