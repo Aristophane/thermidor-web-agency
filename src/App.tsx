@@ -1,8 +1,8 @@
 import "./App.css";
 import styled from "styled-components";
 import LogoWelcomePage from "./components/LogoWelcomePage";
-import { Cta1, Cta2, Cta3, Cta4 } from "./components/HomePageComponents";
-import ClientCarousel from "./components/ClientCarousel";
+import { Cta1, Cta2, Cta3 } from "./components/HomePageComponents";
+import MovingCircles from "./components/MovingCircles";
 
 /*
 SERVICES
@@ -32,13 +32,14 @@ const ContentDiv = styled.div`
   justify-content: center;
   width: 100%;
   align-items: center;
-  background-color: white;
-  margin-top: 130vh;
+  margin-top: 100vh;
+  z-index:1;
 `;
 
 function App() {
   return (
     <>
+      <MovingCircles colors={['red', 'green', 'blue', 'purple', 'orange']} />
       <LogoWelcomePage />
       <ContentDiv>
         <Cta1 />

@@ -10,8 +10,8 @@ const LogoAllPages: React.FC = () => {
           <div className={`all-container-logo`}>
             <img src={logo} alt="Logo Thermidor Agence Web Lille" />
             <div className="all-text-logo-container">
-              <h1>THERMIDOR</h1>
-              <h1>AGENCE WEB</h1>
+              <h1>thermidor</h1>
+              <h1>agence web</h1>
             </div>
           </div>
         </div>

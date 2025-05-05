@@ -37,10 +37,12 @@ const SlidingMenu: React.FC<SlidingMenuProps> = ({ items }) => {
 
   return (
     <div className={`menu-container ${isOpen ? "open" : ""}`}>
-      <div className="burger-icon" onClick={toggleMenu}>
-        <span className="bar"></span>
-        <span className="bar"></span>
-        <span className="bar"></span>
+      <div className="burger-icon-container" onClick={toggleMenu}>
+        <div className="burger-icon">
+          <span className="bar"></span>
+          <span className="bar"></span>
+          <span className="bar"></span>
+        </div>
       </div>
       <div className="menu-items">
         {items.map((item, index) => (

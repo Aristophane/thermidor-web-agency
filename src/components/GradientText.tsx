@@ -19,15 +19,10 @@ const gradientMove = keyframes`
 `;
 
 const GradientText = styled.span<{ color: string }>`
-  display: inline-block;
-  background-image: ${({ color }) =>
-    `linear-gradient(270deg, ${color}, #fc7074, ${color})`};
-  background-size: 200% auto;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
   animation: ${gradientMove} 6s ease infinite;
+  z-index:1;
+  width:100%;
+
 `;
 
 const AnimatedGradientText: React.FC<AnimatedGradientTextProps> = ({

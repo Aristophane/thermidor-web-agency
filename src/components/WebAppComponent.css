@@ -36,7 +36,6 @@
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     position: relative;
-    overflow: hidden;
     transition: transform 0.5s ease, box-shadow 0.5s ease;
   }
   
@@ -52,7 +51,6 @@
     left: -50px;
     width: 200px;
     height: 200px;
-    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
     transition: transform 0.7s ease;
   }
@@ -69,7 +67,6 @@
   
   .tile p {
     font-size: 1.1rem;
-    line-height: 1.6;
     animation: fadeIn 1.5s ease-out;
   }
   

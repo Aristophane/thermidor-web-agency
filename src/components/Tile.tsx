@@ -11,7 +11,6 @@ const TileContainer = styled.div`
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 40px;
   text-align: center;
   transition: all 0.3s ease-in-out;
 

@@ -1,5 +1,5 @@
 import React from "react";
-import {styled, keyframes} from "styled-components";
+import { styled, keyframes } from "styled-components";
 
 // Styles de base pour chaque composant en hauteur pleine
 const CtaFullWidthContainer = styled.div<{ backgroundColor: string }>`
@@ -8,24 +8,25 @@ const CtaFullWidthContainer = styled.div<{ backgroundColor: string }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 40px;
   color: #fff;
   background-color: ${({ backgroundColor }) => backgroundColor};
   text-align: left;
   box-sizing: border-box;
   margin: 0;
-  padding-left:20%;
+  padding-left: 20%;
   flex-wrap: wrap;
 
   @media (max-width: 768px) {
     flex-direction: column;
     text-align: center;
+    padding-left: 0%;
   }
 `;
 
 const TextContent = styled.div`
   flex: 1;
-  padding: 20px;
+  z-index: 2;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -33,12 +34,17 @@ const TextContent = styled.div`
 
   @media (max-width: 768px) {
     align-items: center;
+    padding-left: 15%;
+    padding-right: 15%;
   }
 `;
 
 const Title = styled.h2`
   font-size: 2rem;
   margin-bottom: 12px;
+  @media (max-width: 768px) {
+    text-align: center;
+  }
 `;
 
 const Description = styled.p`
