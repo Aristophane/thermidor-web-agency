@@ -24,15 +24,23 @@ const MovingCircles: React.FC<MovingCirclesProps> = ({ colors }) => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+
     const width = canvas.width = window.innerWidth;
     const height = canvas.height = window.innerHeight;
+
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    canvas.style.width = `${window.innerWidth}px`;
+    canvas.style.height = `${window.innerHeight}px`;
+    ctx.scale(dpr, dpr);
 
     // Crée 5 cercles avec couleurs et vitesse aléatoire
     circles.current = colors.map((color) => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      dx: (Math.random() - 0.5) * 2,
-      dy: (Math.random() - 0.5) * 2,
+      dx: (Math.random() - 0.5) * 0.1,
+      dy: (Math.random() - 0.5) * 0.1,
       radius: 50 + Math.random() * 50,
       color,
     }));
