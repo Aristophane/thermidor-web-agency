@@ -1,8 +1,7 @@
 import "./App.css";
-import styled from "styled-components";
-import LogoWelcomePage from "./components/LogoWelcomePage";
-import { Cta1, Cta2, Cta3 } from "./components/HomePageComponents";
-import MovingCircles from "./components/MovingCircles";
+import { Route, Routes } from "react-router-dom";
+import HomePageContainer from "./components/HomePageContainer";
+import ContactPage from "./components/ContactUs";
 
 /*
 SERVICES
@@ -26,26 +25,10 @@ MENTIONS LEGALES
 
 */
 
-const ContentDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  align-items: center;
-  margin-top: 100vh;
-  z-index:1;
-`;
-
 function App() {
   return (
     <>
-      <MovingCircles colors={['red', 'green', 'blue', 'purple', 'orange']} />
-      <LogoWelcomePage />
-      <ContentDiv>
-        <Cta1 />
-        <Cta2 />
-        <Cta3 />
-      </ContentDiv>
+      <HomePageContainer />
     </>
   );
 }

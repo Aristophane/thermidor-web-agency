@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { styled, keyframes } from "styled-components";
 
 // Styles de base pour chaque composant en hauteur pleine
@@ -79,28 +80,31 @@ const Button = styled.button`
     background-color: #cc2a30;
   }
 `;
-
 // Composants spécifiques
 const Cta1: React.FC = () => (
-  <CtaFullWidthContainer backgroundColor="#4a90e2">
+  <CtaFullWidthContainer backgroundColor="#4D608B">
     <TextContent>
-      <Title>Vous voulez créer le site adapté à vos besoins ?</Title>
+      <Title>Un site parfaitement taillé pour vos besoins ?</Title>
       <Description>
         E-Commerce, Site Vitrine, Back Office, Interface Client
       </Description>
-      <Button>Contactez-nous</Button>
+      <Link to="/contact">
+        <Button>Contactez-nous</Button>
+      </Link>
     </TextContent>
   </CtaFullWidthContainer>
 );
 
 const Cta2: React.FC = () => (
-  <CtaFullWidthContainer backgroundColor="#50e3c2">
+  <CtaFullWidthContainer backgroundColor="#98E9E3">
     <TextContent>
       <Title>Besoin d'une expertise Tech pour votre SI ?</Title>
       <Description>
         Faites appel à nos services de DSI partagée au meilleur prix
       </Description>
-      <Button>Choisissez votre forfait</Button>
+      <Link to="/contact">
+        <Button>Faites appels à nos experts</Button>
+      </Link>
     </TextContent>
   </CtaFullWidthContainer>
 );
@@ -112,7 +116,9 @@ const Cta3: React.FC = () => (
       <Description>
         Nous gérons vos campagnes marketing et optimisons votre SEO
       </Description>
-      <Button>En savoir plus</Button>
+      <Link to="/contact">
+        <Button>Augmenter votre impact marketing</Button>
+      </Link>
     </TextContent>
   </CtaFullWidthContainer>
 );

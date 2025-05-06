@@ -1,0 +1,83 @@
+import styled from "styled-components";
+import { Mail, MessageCircle } from "lucide-react";
+
+const PageWrapper = styled.div`
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  padding: 1.5rem;
+`;
+
+const Card = styled.div`
+  background: white;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 28rem;
+  width: 100%;
+  text-align: center;
+`;
+
+const Title = styled.h1`
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+`;
+
+const InfoRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: #4b5563;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #111827;
+  }
+`;
+
+const WhatsAppLink = styled.a`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: #16a34a;
+  text-decoration: none;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #166534;
+  }
+`;
+
+const Text = styled.span`
+  font-size: 1rem;
+  user-select: all;
+`;
+
+export default function ContactPage() {
+  return (
+    <PageWrapper>
+      <Card>
+        <Title>Contactez-nous</Title>
+
+        <InfoRow>
+          <Mail size={20} />
+          <Text>contact@thermidor-agence-web.fr</Text>
+        </InfoRow>
+
+        <WhatsAppLink
+          href="https://wa.me/33626304326"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <MessageCircle size={20} />
+          <Text>WhatsApp</Text>
+        </WhatsAppLink>
+      </Card>
+    </PageWrapper>
+  );
+}

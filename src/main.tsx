@@ -12,6 +12,7 @@ import ResponsiveDesign from "./components/ResponsiveDesign";
 import ExperienceUtilisateur from "./components/ExperienceUtilisateur";
 import CampagneSEA from "./components/CampagnesSEA";
 import Branding from "./components/Branding";
+import ContactUs from "./components/ContactUs";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,16 @@ const router = createBrowserRouter([
       }
     ],
   },
+  {
+    path: "/contact",
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <ContactUs />,
+      }
+    ]
+  }
 ]);
 
 const root = ReactDOM.createRoot(

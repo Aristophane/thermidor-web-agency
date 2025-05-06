@@ -62,7 +62,7 @@
 }
 
 .menu-container.open {
-  background-color: #000000;
+  background-color: inherit;
 
 }
 

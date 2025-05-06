@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 
 type MovingCirclesProps = {
   colors: string[]; // 5 couleurs attendues
@@ -21,12 +21,12 @@ const MovingCircles: React.FC<MovingCirclesProps> = ({ colors }) => {
     const canvas = canvasRef.current;
     if (!canvas || colors.length !== 5) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-
-    const width = canvas.width = window.innerWidth;
-    const height = canvas.height = window.innerHeight;
+    const width = (canvas.width = window.innerWidth);
+    const height = (canvas.height = window.innerHeight);
+    const heightFactor = window.innerWidth < 768 ? 0.8 : 1;
 
     const dpr = window.devicePixelRatio || 1;
     canvas.width = window.innerWidth * dpr;
@@ -39,9 +39,9 @@ const MovingCircles: React.FC<MovingCirclesProps> = ({ colors }) => {
     circles.current = colors.map((color) => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      dx: (Math.random() - 0.5) * 0.1,
-      dy: (Math.random() - 0.5) * 0.1,
-      radius: 50 + Math.random() * 50,
+      dx: (Math.random() - 0.5) * 1,
+      dy: (Math.random() - 0.5) * 1,
+      radius: heightFactor * 150 + Math.random() * 150,
       color,
     }));
 
@@ -50,7 +50,7 @@ const MovingCircles: React.FC<MovingCirclesProps> = ({ colors }) => {
 
       // Appliquer un effet de flou léger
       ctx.save();
-      ctx.filter = 'blur(8px)';
+      ctx.filter = "blur(8px)";
 
       circles.current.forEach((circle) => {
         // Mouvement
@@ -75,7 +75,22 @@ const MovingCircles: React.FC<MovingCirclesProps> = ({ colors }) => {
     animate();
   }, [colors]);
 
-  return <canvas ref={canvasRef} style={{ width: '100%', height: '100%', position: 'fixed', top:'0', zIndex:'0' }} />;
+  return (
+    <>
+      <div className="canvasContainer">
+        <canvas
+          ref={canvasRef}
+          style={{
+            width: "100%",
+            height: "100%",
+            position: "fixed",
+            top: "0",
+            zIndex: "0",
+          }}
+        />
+      </div>
+    </>
+  );
 };
 
 export default MovingCircles;

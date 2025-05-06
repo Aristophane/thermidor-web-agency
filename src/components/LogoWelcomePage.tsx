@@ -32,7 +32,7 @@ const LogoWelcomePage: React.FC = () => {
         left: 0,
         right: 0,
         display: "flex",
-        zIndex: 0
+        zIndex: 2
       }}
       animate={controls}
     >

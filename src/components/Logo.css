@@ -65,6 +65,7 @@ html, body {
   width: 100%;
   justify-content: center;
   transition: transform 0.2s ease;
+  backdrop-filter: blur(32px);
   transform: translateZ(0);
 }
 
