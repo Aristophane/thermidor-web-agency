@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 type MovingCirclesProps = {
@@ -19,6 +19,8 @@ const MovingCircles: React.FC<MovingCirclesProps> = ({ colors }) => {
   const circles = useRef<Circle[]>([]);
   const { scrollY } = useScroll();
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
+
+  const [isAnimating, setIsAnimating] = useState(true); // Manage animation state
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -47,7 +49,15 @@ const MovingCircles: React.FC<MovingCirclesProps> = ({ colors }) => {
       color,
     }));
 
-    const animate = () => {
+    // Throttle animation frame
+    let lastRender = 0;
+    const animate = (timestamp: number) => {
+      if (timestamp - lastRender < 32) {
+        requestAnimationFrame(animate); // request next frame
+        return;
+      }
+
+      lastRender = timestamp;
       ctx.clearRect(0, 0, width, height);
       ctx.save();
       ctx.filter = "blur(8px)";
@@ -66,11 +76,15 @@ const MovingCircles: React.FC<MovingCirclesProps> = ({ colors }) => {
       });
 
       ctx.restore();
-      requestAnimationFrame(animate);
+      if (isAnimating) requestAnimationFrame(animate); // Continue animation if active
     };
 
-    animate();
-  }, [colors]);
+    animate(0);
+
+    // Clean up on unmount
+    return () => setIsAnimating(false);
+
+  }, [colors, isAnimating]);
 
   return (
     <motion.div

@@ -17,10 +17,12 @@ type Props = {
 };
 
 const Section = styled.section`
-  background-color: #4d608b;
+  background-color: #2b2c2d;
   padding: 4rem 2rem;
   color: white;
   font-family: 'Helvetica', sans-serif;
+  position:relative;
+  z-index:2;
 `;
 
 const Container = styled.div`

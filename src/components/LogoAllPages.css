@@ -20,8 +20,13 @@
   align-items: center;
   justify-content: stretch;
   position: fixed;
+  background-color: #e4e1d0;
   top:0px;
   z-index: 5;
+}
+
+.subLogoAllPages{
+  font-size: 1.2em;
 }
 
 .all-container-logo {
@@ -43,17 +48,17 @@
   animation: slideInFromLeft 2s ease-in-out forwards;
 }
 
-.all-container-logo h1:last-of-type {
+.all-container-logo h2:last-of-type {
   animation: slideInFromRight 2s ease-in-out forwards;
 }
 
 @keyframes slideInFromLeft {
   0% {
-    transform: translateX(-30%);
+    transform: translateX(-70%);
     opacity: 0;
   }
   100% {
-    transform: translateX(0);
+    transform: translateX(-40%);
     opacity: 1;
   }
 }
@@ -69,7 +74,7 @@
     opacity: 0;
   }
   100% {
-    transform: translateX(0);
+    transform: translateX(40%);
     opacity: 1;
   }
 }

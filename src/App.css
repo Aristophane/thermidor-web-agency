@@ -7,3 +7,41 @@
     position: absolute;
     top : -50px
 }
+/* Loading screen styling */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensure it appears on top of everything else */
+    opacity: 1;
+    transition: opacity 1s ease-out;
+  }
+  
+  /* Once the loading is complete, remove the black screen */
+  .loading-screen.hidden {
+    opacity: 0;
+    pointer-events: none; /* Prevent interaction with the screen */
+  }
+  
+  /* Spinner styling */
+  .spinner {
+    border: 8px solid #f3f3f3; /* Light gray background */
+    border-top: 8px solid #000000; /* Blue color for the spinning part */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+  
+  /* Keyframes for spinning animation */
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  

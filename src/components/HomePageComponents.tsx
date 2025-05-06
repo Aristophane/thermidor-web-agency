@@ -18,20 +18,20 @@ const FadeInOnView = styled.div<{ isVisible: boolean }>`
 `;
 
 // Container principal
-const CtaFullWidthContainer = styled.div<{ backgroundColor: string }>`
+const CtaFullWidthContainer = styled.div<{ backgroundcolor: string }>`
   min-height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   color: #fff;
-  background-color: ${({ backgroundColor }) => backgroundColor};
+  background-color: ${({ backgroundcolor }) => backgroundcolor};
   text-align: left;
   box-sizing: border-box;
   margin: 0;
   padding-left: 20%;
   flex-wrap: wrap;
-
+ z-index: 2;
   @media (max-width: 768px) {
     flex-direction: column;
     text-align: center;
@@ -56,10 +56,11 @@ const TextContent = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 2rem;
+  font-size: 2em;
   margin-bottom: 12px;
   @media (max-width: 768px) {
     text-align: center;
+      font-size: 1.8em;
   }
 `;
 
@@ -85,12 +86,12 @@ const Button = styled.button`
 
 // Composant CTA avec effet d'apparition
 const CtaSection = ({
-  backgroundColor,
+  backgroundcolor,
   title,
   description,
   buttonText,
 }: {
-  backgroundColor: string;
+  backgroundcolor: string;
   title: string;
   description: string;
   buttonText: string;
@@ -98,7 +99,7 @@ const CtaSection = ({
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 });
 
   return (
-    <CtaFullWidthContainer backgroundColor={backgroundColor}>
+    <CtaFullWidthContainer backgroundcolor={backgroundcolor}>
       <TextContent ref={ref}>
         <FadeInOnView isVisible={inView}>
           <Title>{title}</Title>
@@ -119,7 +120,7 @@ const CtaSection = ({
 // Déclinaisons
 const Cta1 = () => (
   <CtaSection
-    backgroundColor="#4D608B"
+    backgroundcolor="#4D608B"
     title="Un site parfaitement taillé pour vos besoins ?"
     description="E-Commerce, Site Vitrine, Back Office, Interface Client"
     buttonText="Contactez-nous"
@@ -128,7 +129,7 @@ const Cta1 = () => (
 
 const Cta2 = () => (
   <CtaSection
-    backgroundColor="#DBB846"
+    backgroundcolor="#DBB846"
     title="Besoin d'une expertise Tech pour votre SI ?"
     description="Faites appel à nos services de DSI partagée au meilleur prix"
     buttonText="Faites appel à nos experts"
@@ -137,7 +138,7 @@ const Cta2 = () => (
 
 const Cta3 = () => (
   <CtaSection
-    backgroundColor="#e94e77"
+    backgroundcolor="#e94e77"
     title="Envie de développer votre impact ?"
     description="Nous gérons vos campagnes marketing et optimisons votre SEO"
     buttonText="Augmenter votre impact marketing"

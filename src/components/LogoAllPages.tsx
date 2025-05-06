@@ -9,7 +9,7 @@ const LogoAllPages: React.FC = () => {
           <div className={`all-container-logo`}>
             <div className="all-text-logo-container">
               <h1>thermidor</h1>
-              <h1>agence web</h1>
+              <h2 className="subLogoAllPages">agence web</h2>
             </div>
           </div>
         </div>

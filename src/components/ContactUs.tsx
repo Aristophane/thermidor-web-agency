@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Mail, MessageCircle } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 
 const PageWrapper = styled.div`
   min-height: 100vh;
@@ -25,6 +25,7 @@ const Card = styled.div`
 
 const Title = styled.h1`
   font-size: 1.5rem;
+  font-family:Helvetica, sans-serif;
   font-weight: 600;
   color: #1f2937;
 `;
@@ -72,8 +73,7 @@ export default function ContactPage() {
         <Title>Contactez-nous</Title>
 
         <InfoRow>
-          <Mail size={20} />
-          <Text>contact@thermidor-agence-web.fr</Text>
+            <a href="mailto:contact@thermidor-agence-web.fr">contact@thermidor-agence-web.fr</a>
         </InfoRow>
 
         <WhatsAppLink
