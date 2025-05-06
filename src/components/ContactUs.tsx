@@ -6,7 +6,7 @@ const PageWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f3f4f6;
+  background-color: inherit;
   padding: 1.5rem;
 `;
 
@@ -18,6 +18,9 @@ const Card = styled.div`
   max-width: 28rem;
   width: 100%;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
 `;
 
 const Title = styled.h1`
@@ -56,6 +59,10 @@ const WhatsAppLink = styled.a`
 const Text = styled.span`
   font-size: 1rem;
   user-select: all;
+  @media (max-width: 768px) {
+    text-align: center;
+    font-size: 0.8rem;
+  }
 `;
 
 export default function ContactPage() {

@@ -7,7 +7,7 @@ h1 {
 }
 
 h2 {
-  font-family: 'Inter';
+  font-family: 'Helvetica';
   font-size: 2em;
   letter-spacing: -1px;
   margin: 0px;
@@ -17,7 +17,7 @@ h2 {
 h1.logoTitle {
   font-family: 'Gloock', serif;
   letter-spacing: -1px;
-  font-size: 3.5em;
+  font-size: 4.3em;
   margin: 0px;
   z-index: 1;
 }
@@ -25,7 +25,6 @@ h1.logoTitle {
 h2.logoTitle {
   font-size: 2rem;
   margin: 0;
-  transform: translateX(calc((100% - 6ch))); /* ajuste selon la longueur du h2 */
 }
 
 .text-logo-container {
@@ -84,11 +83,11 @@ html, body {
 
 @keyframes slideInFromLeft {
   0% {
-    transform: translateX(-30%);
+    transform: translateX(-80%);
     opacity: 0;
   }
   100% {
-    transform: translateX(0);
+    transform: translateX(70px);
     opacity: 1;
   }
 }
@@ -100,11 +99,11 @@ html, body {
 
 @keyframes slideInFromRight {
   0% {
-    transform: translateX(30%);
+    transform: translateX(80%);
     opacity: 0;
   }
   100% {
-    transform: translateX(-40px);
+    transform: translateX(0px);
     opacity: 1;
   }
 }

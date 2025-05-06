@@ -6,7 +6,8 @@ enum LinksEnum {
   ResponsiveDesign = "/responsive-design",
   CampagnesSEA = "/sea-organiser-votre-campagne-adWords-insta-google",
   Branding = "/branding-identite-visuelle",
-  Contact= "/contact"
+  Contact= "/contact",
+  Projets = "/projets-web-seo"
 }
 
 export default LinksEnum;

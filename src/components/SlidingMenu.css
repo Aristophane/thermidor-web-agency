@@ -65,8 +65,11 @@
   background-color: #B3AD8A;
 }
 
-.menu-item {
+.menu-item-wrapper{
   padding-bottom: 25px;
+}
+
+.menu-item {
   padding-left: 30px;
   font-size: 18px;
   opacity: 0;
