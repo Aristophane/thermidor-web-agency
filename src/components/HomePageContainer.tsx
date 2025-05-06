@@ -1,9 +1,9 @@
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { Cta1, Cta2, Cta3 } from "./HomePageComponents";
 import LogoWelcomePage from "./LogoWelcomePage";
 import MovingCircles from "./MovingCircles";
 import { motion, useScroll, useTransform } from "framer-motion";
-import React from "react";
 
 const ContentDiv = styled.div`
   display: flex;
@@ -30,12 +30,36 @@ const HomePageContainer: React.FC = () => {
   const { scrollY } = useScroll();
   const opacity = useTransform(scrollY, [0, window.innerHeight], [1, 0]);
 
+  // Référence pour le div ContentDiv
+  const contentDivRef = useRef<HTMLDivElement>(null);
+
+  // State pour gérer si c'est le premier scroll
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  // Détecter le premier scroll et focus sur ContentDiv
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!hasScrolled) {
+        console.log("focus!!")
+        setHasScrolled(true);
+        // Focus sur ContentDiv après le premier scroll
+        contentDivRef.current?.focus();
+      }
+    };
+
+    // Ajouter un event listener pour écouter le scroll
+    window.addEventListener("scroll", handleScroll, { once: true });
+
+    // Nettoyer l'event listener quand le composant est démonté
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [hasScrolled]);
+
   return (
     <>
       <MotionBlur style={{ opacity }} />
       <MovingCircles colors={['#D9FAD7', '#DBB846', '#98E9E3', '#CAD783', '#4D608B']} />
       <LogoWelcomePage />
-      <ContentDiv>
+      <ContentDiv ref={contentDivRef} tabIndex={-1}>
         <Cta1 />
         <Cta2 />
         <Cta3 />

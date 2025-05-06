@@ -8,15 +8,17 @@ const ScrollWrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  height: 200vh; // hauteur suffisante pour détecter le scroll
+  height: 300vh; 
   width: 100vw;
   pointer-events: none;
   z-index: 0;
 `;
 
 const LogoWelcomePage: React.FC = () => {
-  const { scrollY } = useScroll();
-  const height = useTransform(scrollY, [0, window.innerHeight], ["100vh", "15vh"]);
+  const { scrollYProgress } = useScroll(); // Utiliser scrollYProgress plutôt que scrollY
+
+  // Forcer un changement instantané de la hauteur du logo après le premier scroll
+  const height = useTransform(scrollYProgress, [0, 0.2], ["100vh", "15vh"]);
 
   return (
     <>
