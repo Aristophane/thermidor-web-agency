@@ -11,13 +11,13 @@ export const menuItems : MenuItem[] = [
       ],
     },
     { label: "Projets" },
-    {
-      label: "Clients",
-      submenu: [
-        { label: "Web Development" },
-        { label: "SEO" },
-        { label: "Marketing" },
-      ],
-    },
-    { label: "Contact" },
+    // {
+    //   label: "Clients",
+    //   submenu: [
+    //     { label: "Web Development" },
+    //     { label: "SEO" },
+    //     { label: "Marketing" },
+    //   ],
+    // },
+    { label: "Contact" , url: LinksEnum.Contact },
   ];

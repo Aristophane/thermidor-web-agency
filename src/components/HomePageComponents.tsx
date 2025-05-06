@@ -96,7 +96,7 @@ const Cta1: React.FC = () => (
 );
 
 const Cta2: React.FC = () => (
-  <CtaFullWidthContainer backgroundColor="#98E9E3">
+  <CtaFullWidthContainer backgroundColor="#DBB846">
     <TextContent>
       <Title>Besoin d'une expertise Tech pour votre SI ?</Title>
       <Description>

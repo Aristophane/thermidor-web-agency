@@ -1,7 +1,5 @@
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
 import HomePageContainer from "./components/HomePageContainer";
-import ContactPage from "./components/ContactUs";
 
 /*
 SERVICES
