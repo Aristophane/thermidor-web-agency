@@ -57,7 +57,7 @@ const HomePageContainer: React.FC = () => {
   return (
     <>
       <MotionBlur style={{ opacity }} />
-      <MovingCircles colors={['#D9FAD7', '#DBB846', '#98E9E3', '#CAD783', '#4D608B']} />
+      <MovingCircles colors={['#1b1e25', '#DBB846', '#98E9E3', '#14161b', '#0e0f12']} />
       <LogoWelcomePage />
       <ContentDiv ref={contentDivRef} tabIndex={-1}>
         <Cta1 />

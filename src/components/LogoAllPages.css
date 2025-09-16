@@ -1,7 +1,7 @@
 .all-text-logo-container h1 {
   font-family: "Gloock", serif;
-  letter-spacing: -2px;
-  font-size: 2em;
+  letter-spacing: -1px;
+  font-size: 1.6em;
   margin: 0px;
 }
 
@@ -20,7 +20,9 @@
   align-items: center;
   justify-content: stretch;
   position: fixed;
-  background-color: #e4e1d0;
+  background: rgba(10,11,14,0.45);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
   top:0px;
   z-index: 5;
 }
@@ -45,11 +47,11 @@
 }
 
 .all-container-logo h1:first-of-type {
-  animation: slideInFromLeft 2s ease-in-out forwards;
+  animation: slideInFromLeft 1.2s ease-out forwards;
 }
 
 .all-container-logo h2:last-of-type {
-  animation: slideInFromRight 2s ease-in-out forwards;
+  animation: slideInFromRight 1.2s ease-out forwards;
 }
 
 @keyframes slideInFromLeft {

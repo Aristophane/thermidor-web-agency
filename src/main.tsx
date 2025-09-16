@@ -14,6 +14,7 @@ import CampagneSEA from "./components/CampagnesSEA";
 import Branding from "./components/Branding";
 import ContactUs from "./components/ContactUs";
 import ProjectShowcase, { Project } from "./components/ProjectShowcase";
+import Service from "./components/Service";
 import boillotLogo from "./assets/logoBoillot.jpeg"
 import imageBoillot from "./assets/imageBoillot.jpg"
 import logoCharletBois from "./assets/charletBois.png"
@@ -111,6 +112,16 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <ProjectShowcase projects={dummyProjects} />,
+      }
+    ]
+  },
+  {
+    path: LinksEnum.Service,
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <Service />,
       }
     ]
   }

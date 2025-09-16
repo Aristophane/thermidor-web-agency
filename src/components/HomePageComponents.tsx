@@ -56,31 +56,38 @@ const TextContent = styled.div`
 `;
 
 const Title = styled.h2`
-  font-size: 2em;
+  font-size: clamp(1.8rem, 3.2vw, 3rem);
   margin-bottom: 12px;
+  color: var(--text);
+  text-shadow: 0 2px 30px rgba(0,0,0,0.35);
   @media (max-width: 768px) {
     text-align: center;
-      font-size: 1.8em;
   }
 `;
 
 const Description = styled.p`
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   margin-bottom: 20px;
+  color: var(--muted);
 `;
 
 const Button = styled.button`
-  background-color: transparent;
-  border: 2px solid white;
-  color: #fff;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.18);
+  color: var(--text);
   padding: 12px 24px;
-  border-radius: 5px;
+  border-radius: 9999px;
   cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.3s ease;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 
   &:hover {
-    background-color: #cc2a30;
+    transform: translateY(-1px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
   }
 `;
 
@@ -120,7 +127,7 @@ const CtaSection = ({
 // Déclinaisons
 const Cta1 = () => (
   <CtaSection
-    backgroundcolor="#4D608B"
+    backgroundcolor="#1b1e25"
     title="Un site parfaitement taillé pour vos besoins ?"
     description="E-Commerce, Site Vitrine, Back Office, Interface Client"
     buttonText="Contactez-nous"
@@ -129,7 +136,7 @@ const Cta1 = () => (
 
 const Cta2 = () => (
   <CtaSection
-    backgroundcolor="#DBB846"
+    backgroundcolor="#14161b"
     title="Besoin d'une expertise Tech pour votre SI ?"
     description="Faites appel à nos services de DSI partagée au meilleur prix"
     buttonText="Faites appel à nos experts"
@@ -138,7 +145,7 @@ const Cta2 = () => (
 
 const Cta3 = () => (
   <CtaSection
-    backgroundcolor="#e94e77"
+    backgroundcolor="#0e0f12"
     title="Envie de développer votre impact ?"
     description="Nous gérons vos campagnes marketing et optimisons votre SEO"
     buttonText="Augmenter votre impact marketing"
