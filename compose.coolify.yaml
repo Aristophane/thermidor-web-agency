@@ -1,0 +1,49 @@
+# Coolify: Docker Compose build pack, Base Directory /,
+# Docker Compose Location /compose.coolify.yaml.
+# Assign https://thermidor-agence-web.fr:3000 to the app service in Coolify.
+# BASE_URL is the PUBLIC URL, without :3000.
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    init: true
+    expose:
+      - "3000"
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: "3000"
+      TRUST_PROXY: "1"
+      DATABASE_PATH: /app/data/thermidor.sqlite
+      UPLOAD_DIR: /app/public/uploads
+      BASE_URL: ${BASE_URL:?}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-contact@thermidor-agence-web.fr}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:?}
+      SESSION_SECRET: ${SESSION_SECRET:?}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_FROM: ${SMTP_FROM:-Thermidor <contact@thermidor-agence-web.fr>}
+      LEGAL_COMPANY: ${LEGAL_COMPANY:-Thermidor}
+      LEGAL_ADDRESS: ${LEGAL_ADDRESS:-}
+      LEGAL_REGISTRATION: ${LEGAL_REGISTRATION:-}
+      LEGAL_DIRECTOR: ${LEGAL_DIRECTOR:-}
+      LEGAL_HOST: ${LEGAL_HOST:-}
+    volumes:
+      - thermidor_data:/app/data
+      - thermidor_uploads:/app/public/uploads
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Coolify manages the network, reverse proxy, HTTPS and resource-specific names.
+# Named volumes inherit the ownership of the image's pre-created directories.
+volumes:
+  thermidor_data:
+  thermidor_uploads:

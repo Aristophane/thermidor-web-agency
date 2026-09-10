@@ -1,0 +1,8 @@
+www.thermidor-agence-web.fr {
+    redir https://thermidor-agence-web.fr{uri} permanent
+}
+
+thermidor-agence-web.fr {
+    encode zstd gzip
+    reverse_proxy app:3000
+}

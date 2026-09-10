@@ -1,0 +1,17 @@
+import { mkdir, writeFile } from 'node:fs/promises';
+import sharp from 'sharp';
+await mkdir('public/fonts', { recursive: true });
+const response = await fetch('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap', { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36' } });
+if (!response.ok) throw new Error('Font stylesheet unavailable');
+const css = await response.text();
+const urls = [...css.matchAll(/url\((https:\/\/[^)]+)\)/g)];
+if (!urls.length) throw new Error('No font file found');
+const font = await fetch(urls.at(-1)[1]);
+if (!font.ok) throw new Error('Font download failed');
+await writeFile('public/fonts/manrope-latin.woff2', Buffer.from(await font.arrayBuffer()));
+const license = await fetch('https://raw.githubusercontent.com/google/fonts/main/ofl/manrope/OFL.txt');
+if (!license.ok) throw new Error('Font license download failed');
+await writeFile('public/fonts/OFL-Manrope.txt', await license.text());
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><rect width="1200" height="630" fill="#f7f7f2"/><text x="75" y="115" font-family="sans-serif" font-size="43" font-weight="700" fill="#242820">thermidor.</text><text x="75" y="285" font-family="sans-serif" font-size="76" fill="#242820">Des idées claires.</text><text x="75" y="390" font-family="serif" font-style="italic" font-size="82" fill="#64743e">Du digital qui compte.</text><path d="M75 475h1050" stroke="#d9dbd1"/><text x="75" y="538" font-family="sans-serif" font-size="22" fill="#666a60">Web · Logiciel · Mobile · SEO · IA · Gouvernance</text><text x="75" y="578" font-family="sans-serif" font-size="18" fill="#666a60">Lille — France — Europe</text></svg>`;
+await sharp(Buffer.from(svg)).png().toFile('public/media/social.png');
+console.log('Local font, license and social image ready.');
