@@ -16,7 +16,7 @@ const post = (path, data, headers = {}) => fetch(base + path, { method: 'POST', 
 const validContact = () => ({ token: formToken(secret), lang: 'fr', name: 'Camille', email: 'camille@example.com', message: 'Bonjour, je souhaite discuter de mon projet web.', company: '', need: 'developpement-web', website: '' });
 before(async () => {
   store = createStore(':memory:'); mkdirSync(uploadDir, { recursive: true });
-  const { app } = createApp({ store, env: { NODE_ENV: 'test', BASE_URL: origin, ADMIN_EMAIL: 'admin@example.com', ADMIN_PASSWORD_HASH: await hashPassword('a-long-test-password-123'), SESSION_SECRET: secret, UPLOAD_DIR: uploadDir, SMTP_FROM: 'test@example.com' }, mailer: { sendMail: async message => { sent.push(message); return { accepted: ['contact@thermidor-agence-web.fr'] }; } } });
+  const { app } = createApp({ store, env: { NODE_ENV: 'test', BASE_URL: origin, ADMIN_EMAIL: 'admin@example.com', ADMIN_PASSWORD_HASH: await hashPassword('a-long-test-password-123'), SESSION_SECRET: secret, UPLOAD_DIR: uploadDir, SMTP_FROM: 'test@example.com' }, mailer: { sendMail: async message => { sent.push(message); return { accepted: [message.to, message.cc.address] }; } } });
   server = app.listen(0, '127.0.0.1'); await once(server, 'listening'); base = `http://127.0.0.1:${server.address().port}`;
 });
 after(async () => { await new Promise(resolve => server.close(resolve)); store.close(); });
@@ -38,7 +38,9 @@ test('Legacy URLs redirect and missing routes return real 404 status', async () 
 });
 test('Contact validates token, origin and fields before passing a message to SMTP', async () => {
   let r = await post('/api/contact', validContact(), { Accept: 'application/json' }); assert.equal(r.status, 200); assert.equal(sent.length, 1);
-  assert.equal(sent[0].to, 'contact@thermidor-agence-web.fr'); assert.equal(sent[0].replyTo.address, 'camille@example.com');
+  assert.equal(sent[0].to, 'contact@thermidor-agence-web.fr'); assert.equal(sent[0].cc.address, 'camille@example.com');
+  assert.deepEqual(sent[0].replyTo, ['contact@thermidor-agence-web.fr', { name: 'Camille', address: 'camille@example.com' }]);
+  assert.match(sent[0].html, /Copie de votre message/); assert.match(sent[0].html, /Nous vous répondrons dès que possible/);
   r = await post('/api/contact', { ...validContact(), token: 'forged' }, { Accept: 'application/json' }); assert.equal(r.status, 400);
   r = await post('/api/contact', { ...validContact(), email: 'user@example.com\r\nBcc:bad@example.com' }, { Accept: 'application/json' }); assert.equal(r.status, 400);
   r = await post('/api/contact', validContact(), { Origin: 'https://evil.example', Accept: 'application/json' }); assert.equal(r.status, 403);

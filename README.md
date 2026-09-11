@@ -30,6 +30,14 @@ Les projets sont initialisés une seule fois dans `data/thermidor.sqlite`. Les m
 
 Les anciens fichiers images non utilisés ne sont pas chargés par le nouveau site. Les médias importés ne sont pas supprimés automatiquement lors de la suppression d’un projet, pour éviter de casser une image réutilisée. Prévoir un nettoyage périodique des fichiers orphelins si nécessaire.
 
+## Emails de contact
+
+Le formulaire envoie un email HTML à `contact@thermidor-agence-web.fr` et place le visiteur en **CC**. Le message contient le logo intégré en PNG, un remerciement et la copie de la demande, dans la langue du formulaire. Une alternative texte est incluse. Le champ `Reply-To` contient Thermidor et le visiteur pour permettre de poursuivre l’échange depuis les deux boîtes.
+
+Si le serveur SMTP accepte la demande pour Thermidor mais refuse la copie, le formulaire confirme la transmission à l’agence et signale l’échec de la copie. L’acceptation SMTP ne garantit pas la remise finale : vérifier les événements de livraison dans Mailjet pour un envoi réel.
+
+Prévisualisation locale sans envoyer d’email : `node scripts/preview-contact-email.js`. Les fichiers HTML, EML et captures FR/EN sont générés dans `artifacts/email/`.
+
 ## Installer sur Coolify
 
 Pour le VPS géré avec Coolify, suivre [le guide dédié](deploy/COOLIFY.md). Sélectionner le build pack **Docker Compose**, avec **Docker Compose Location** `/compose.coolify.yaml` et le domaine du service `app` **`https://thermidor-agence-web.fr:3000`**. `BASE_URL` reste **`https://thermidor-agence-web.fr`**, sans le port interne.

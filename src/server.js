@@ -8,6 +8,7 @@ import { createStore } from './store.js';
 import { renderPage, escape } from './views.js';
 import { adminPage } from './admin-views.js';
 import { services, paths } from './content.js';
+import { contactEmail, CONTACT_ADDRESS } from './contact-email.js';
 import { randomToken, digest, verifyPassword, formToken, checkFormToken, limiter } from './security.js';
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
@@ -104,12 +105,14 @@ export function createApp(overrides = {}) {
     if (!checkFormToken(req.body.token, secret)) return respond(400, lang === 'fr' ? 'Ce formulaire a expiré. Rechargez la page avant de réessayer.' : 'This form has expired. Please reload the page and try again.');
     if (req.body.website) return respond(400, failure);
     const { name, email, company = '', message, need = '' } = req.body;
-    if (typeof name !== 'string' || !name.trim() || name.length > 120 || /[\r\n]/.test(name) || typeof email !== 'string' || email.length > 254 || !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email) || typeof company !== 'string' || company.length > 160 || typeof message !== 'string' || message.trim().length < 20 || message.length > 5000 || typeof need !== 'string' || (need && need !== 'other' && !services.some(s => s.slug === need))) return respond(400, lang === 'fr' ? 'Vérifiez votre nom, votre email et votre message (20 caractères minimum).' : 'Please check your name, email and message (at least 20 characters).');
+    if (typeof name !== 'string' || !name.trim() || name.length > 120 || /[\r\n]/.test(name) || typeof email !== 'string' || email.length > 254 || !/^[^\s@<>,;]+@[^\s@<>,;]+\.[^\s@<>,;]+$/.test(email) || typeof company !== 'string' || company.length > 160 || typeof message !== 'string' || message.trim().length < 20 || message.length > 5000 || typeof need !== 'string' || (need && need !== 'other' && !services.some(s => s.slug === need))) return respond(400, lang === 'fr' ? 'Vérifiez votre nom, votre email et votre message (20 caractères minimum).' : 'Please check your name, email and message (at least 20 characters).');
     if (!smtpReady) return respond(503, failure);
     try {
       const topic = services.find(s => s.slug === need)?.title[lang === 'fr' ? 0 : 1] || (lang === 'fr' ? 'Prise de contact' : 'Enquiry');
-      const result = await mailer.sendMail({ from: env.SMTP_FROM, to: 'contact@thermidor-agence-web.fr', replyTo: { name: name.trim(), address: email.trim() }, subject: `[Thermidor] ${topic}`, text: `Nom : ${name.trim()}\nEmail : ${email.trim()}\nEntreprise : ${company.trim()}\nSujet : ${topic}\nLangue : ${lang}\n\n${message.trim()}`, disableFileAccess: true, disableUrlAccess: true });
-      if (!result.accepted?.length) throw new Error('SMTP recipient not accepted');
+      const result = await mailer.sendMail(contactEmail({ from: env.SMTP_FROM, name, email, company, message, topic, lang }));
+      const accepted = new Set((result.accepted || []).map(address => String(address).trim().toLowerCase()));
+      if (!accepted.has(CONTACT_ADDRESS)) throw new Error('SMTP agency recipient not accepted');
+      if (!accepted.has(email.trim().toLowerCase())) return respond(200, lang === 'fr' ? 'Votre demande a bien été transmise à Thermidor, mais la copie n’a pas pu être envoyée à votre adresse. Inutile de renvoyer le formulaire.' : 'Your enquiry has been sent to Thermidor, but the copy could not be sent to your address. You do not need to submit the form again.');
       return respond(200, lang === 'fr' ? 'Merci, votre message a bien été envoyé. Nous reviendrons vers vous par email.' : 'Thank you, your message has been sent. We will get back to you by email.');
     } catch { console.error('Contact: SMTP delivery failed.'); return respond(502, failure); }
   });

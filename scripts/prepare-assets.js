@@ -12,6 +12,7 @@ await writeFile('public/fonts/manrope-latin.woff2', Buffer.from(await font.array
 const license = await fetch('https://raw.githubusercontent.com/google/fonts/main/ofl/manrope/OFL.txt');
 if (!license.ok) throw new Error('Font license download failed');
 await writeFile('public/fonts/OFL-Manrope.txt', await license.text());
+await sharp('public/favicon.svg').resize(96, 96).png().toFile('public/media/email-logo.png');
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><rect width="1200" height="630" fill="#f7f7f2"/><text x="75" y="115" font-family="sans-serif" font-size="43" font-weight="700" fill="#242820">thermidor.</text><text x="75" y="285" font-family="sans-serif" font-size="76" fill="#242820">Des idées claires.</text><text x="75" y="390" font-family="serif" font-style="italic" font-size="82" fill="#64743e">Du digital qui compte.</text><path d="M75 475h1050" stroke="#d9dbd1"/><text x="75" y="538" font-family="sans-serif" font-size="22" fill="#666a60">Web · Logiciel · Mobile · SEO · IA · Gouvernance</text><text x="75" y="578" font-family="sans-serif" font-size="18" fill="#666a60">Lille — France — Europe</text></svg>`;
 await sharp(Buffer.from(svg)).png().toFile('public/media/social.png');
 console.log('Local font, license and social image ready.');
