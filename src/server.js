@@ -99,7 +99,7 @@ export function createApp(overrides = {}) {
     const respond = (code, message) => {
       res.status(code);
       if (req.get('accept')?.includes('application/json')) return res.json({ message });
-      return res.send(renderPage({ lang, page: 'contact', token: formToken(secret), baseUrl, status: message }));
+      return res.send(renderPage({ lang, page: 'contact', token: formToken(secret), baseUrl, status: message, statusTone: code < 400 ? 'success' : 'error' }));
     };
     const failure = lang === 'fr' ? 'Le message n’a pas pu être envoyé. Écrivez-nous à contact@thermidor-agence-web.fr.' : 'Your message could not be sent. Please email contact@thermidor-agence-web.fr.';
     if (!checkFormToken(req.body.token, secret)) return respond(400, lang === 'fr' ? 'Ce formulaire a expiré. Rechargez la page avant de réessayer.' : 'This form has expired. Please reload the page and try again.');
