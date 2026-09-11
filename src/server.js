@@ -109,10 +109,17 @@ export function createApp(overrides = {}) {
     if (!smtpReady) return respond(503, failure);
     try {
       const topic = services.find(s => s.slug === need)?.title[lang === 'fr' ? 0 : 1] || (lang === 'fr' ? 'Prise de contact' : 'Enquiry');
-      const result = await mailer.sendMail(contactEmail({ from: env.SMTP_FROM, name, email, company, message, topic, lang }));
+      const enquiry = { from: env.SMTP_FROM, name, email, company, message, topic, lang };
+      const result = await mailer.sendMail(contactEmail({ ...enquiry, audience: 'agency' }));
       const accepted = new Set((result.accepted || []).map(address => String(address).trim().toLowerCase()));
       if (!accepted.has(CONTACT_ADDRESS)) throw new Error('SMTP agency recipient not accepted');
-      if (!accepted.has(email.trim().toLowerCase())) return respond(200, lang === 'fr' ? 'Votre demande a bien été transmise à Thermidor, mais la copie n’a pas pu être envoyée à votre adresse. Inutile de renvoyer le formulaire.' : 'Your enquiry has been sent to Thermidor, but the copy could not be sent to your address. You do not need to submit the form again.');
+      try {
+        const confirmation = await mailer.sendMail(contactEmail(enquiry));
+        if (!(confirmation.accepted || []).some(address => String(address).trim().toLowerCase() === email.trim().toLowerCase())) throw new Error('SMTP visitor recipient not accepted');
+      } catch {
+        console.error('Contact: SMTP visitor confirmation failed.');
+        return respond(200, lang === 'fr' ? 'Votre demande a bien été transmise à Thermidor, mais la copie n’a pas pu être envoyée à votre adresse. Inutile de renvoyer le formulaire.' : 'Your enquiry has been sent to Thermidor, but the copy could not be sent to your address. You do not need to submit the form again.');
+      }
       return respond(200, lang === 'fr' ? 'Merci, votre message a bien été envoyé. Nous reviendrons vers vous par email.' : 'Thank you, your message has been sent. We will get back to you by email.');
     } catch { console.error('Contact: SMTP delivery failed.'); return respond(502, failure); }
   });

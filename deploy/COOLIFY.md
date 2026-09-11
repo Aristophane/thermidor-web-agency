@@ -66,7 +66,7 @@ Générer le secret de session :
 node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"
 ```
 
-Le destinataire principal du formulaire reste `contact@thermidor-agence-web.fr` et le visiteur reçoit le même email en CC. L’email HTML inclut le logo Thermidor, un remerciement et la copie de sa demande, avec une alternative texte. `ADMIN_EMAIL` change uniquement l’identifiant de connexion. Sans SMTP configuré, le site fonctionne et le formulaire affiche un échec explicite. Après configuration, vérifier un envoi réel et sa réception dans les deux boîtes.
+Le formulaire envoie deux emails distincts : une notification « Vous avez reçu une demande de contact sur Thermidor » à `contact@thermidor-agence-web.fr`, puis un remerciement avec la copie du message au visiteur. Les deux incluent le logo Thermidor et une alternative texte. Le remerciement reprend la langue du formulaire ; la notification de l’agence est en français. `Reply-To` permet à chaque destinataire de répondre à l’autre. `ADMIN_EMAIL` change uniquement l’identifiant de connexion. Sans SMTP configuré, le site fonctionne et le formulaire affiche un échec explicite. Après configuration, vérifier un envoi réel et sa réception dans les deux boîtes. Aucune variable supplémentaire n’est nécessaire.
 
 ## 4. Stockage et santé
 

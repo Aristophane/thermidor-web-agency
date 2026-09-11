@@ -25,12 +25,24 @@ const translations = {
   }
 };
 
-export function contactEmail({ name, email, company = '', message, topic, lang = 'fr', from }) {
-  const language = lang === 'en' ? 'en' : 'fr', c = translations[language];
+export function contactEmail({ name, email, company = '', message, topic, lang = 'fr', from, audience = 'visitor' }) {
+  const agency = audience === 'agency';
+  const language = !agency && lang === 'en' ? 'en' : 'fr';
+  const c = agency ? {
+    ...translations.fr,
+    subject: 'Vous avez reçu une demande de contact sur Thermidor',
+    heading: 'Une nouvelle<br>demande de contact.',
+    thanks: 'Vous avez reçu une demande de contact sur Thermidor.',
+    intro: 'Retrouvez les coordonnées de la personne et son message ci-dessous.',
+    copy: 'Détails de la demande', closing: 'Pour poursuivre l’échange,', write: 'Répondre à cette demande',
+    note: 'Cette notification provient du formulaire de contact Thermidor.'
+  } : translations[language];
   const visitor = { name: name.trim(), address: email.trim() };
+  const greeting = agency ? 'Bonjour,' : `${c.hello} ${visitor.name},`;
+  const replyAddress = agency ? visitor.address : CONTACT_ADDRESS;
   const details = [[c.name, visitor.name], [c.email, visitor.address], ...(company.trim() ? [[c.company, company.trim()]] : []), [c.topic, topic]];
   const body = message.trim();
-  const text = `${c.hello} ${visitor.name},\n\n${c.thanks}\n${c.intro}\n\n${c.copy}\n${'—'.repeat(24)}\n${details.map(([key, value]) => `${key} : ${value}`).join('\n')}\n\n${body}\n\n${c.signature}\n${c.team}\n${CONTACT_ADDRESS}\n\n${c.closing} ${CONTACT_ADDRESS}\n\n${c.note}`;
+  const text = `${greeting}\n\n${c.thanks}\n${c.intro}\n\n${c.copy}\n${'—'.repeat(24)}\n${details.map(([key, value]) => `${key} : ${value}`).join('\n')}\n\n${body}${agency ? '' : `\n\n${c.signature}\n${c.team}`}\n\n${c.closing} ${replyAddress}\n\n${c.note}`;
   const rows = details.map(([key, value]) => `<tr><td valign="top" width="100" style="padding:6px 12px 6px 0;font-size:12px;line-height:20px;color:#666a60;">${escape(key)}</td><td valign="top" style="padding:6px 0;font-size:13px;line-height:20px;color:#242820;word-break:break-word;overflow-wrap:anywhere;">${escape(value)}</td></tr>`).join('');
   const html = `<!doctype html>
 <html lang="${language}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>${c.subject} — Thermidor</title></head>
@@ -44,7 +56,7 @@ export function contactEmail({ name, email, company = '', message, topic, lang =
 </td></tr>
 <tr><td style="padding:34px 28px 28px;">
 <h1 style="margin:0 0 26px;font-size:36px;line-height:41px;font-weight:400;letter-spacing:-1.5px;color:#242820;">${c.heading}</h1>
-<p style="margin:0 0 16px;font-size:15px;line-height:25px;word-break:break-word;overflow-wrap:anywhere;">${c.hello} ${escape(visitor.name)},</p>
+<p style="margin:0 0 16px;font-size:15px;line-height:25px;word-break:break-word;overflow-wrap:anywhere;">${escape(greeting)}</p>
 <p style="margin:0 0 12px;font-size:15px;line-height:25px;">${c.thanks}</p>
 <p style="margin:0;font-size:14px;line-height:24px;color:#666a60;">${c.intro}</p>
 </td></tr>
@@ -52,17 +64,17 @@ export function contactEmail({ name, email, company = '', message, topic, lang =
 <h2 style="margin:0 0 18px;padding-top:24px;border-top:1px solid #d9dbd1;font-size:19px;line-height:26px;font-weight:500;color:#242820;">${c.copy}</h2>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed;">${rows}</table>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed;margin-top:18px;"><tr><td bgcolor="#e9ecdf" style="padding:20px;background-color:#e9ecdf;font-size:14px;line-height:24px;color:#242820;word-break:break-word;overflow-wrap:anywhere;">${escape(body).replace(/\r\n|\r|\n/g, '<br>')}</td></tr></table>
-<p style="margin:26px 0 0;font-size:14px;line-height:23px;">${c.signature}<br><strong>${c.team}</strong></p>
+${agency ? '' : `<p style="margin:26px 0 0;font-size:14px;line-height:23px;">${c.signature}<br><strong>${c.team}</strong></p>`}
 </td></tr>
-<tr><td bgcolor="#282e24" style="padding:24px 28px;background-color:#282e24;color:#f7f7f2;"><p style="margin:0 0 8px;font-size:14px;line-height:22px;">${c.closing}</p><a href="mailto:${CONTACT_ADDRESS}" style="color:#f7f7f2;font-size:14px;line-height:22px;text-decoration:underline;text-underline-offset:3px;">${c.write} →</a><p style="margin:18px 0 0;font-size:11px;line-height:18px;color:#c1c7b9;">${c.tagline}</p></td></tr>
+<tr><td bgcolor="#282e24" style="padding:24px 28px;background-color:#282e24;color:#f7f7f2;"><p style="margin:0 0 8px;font-size:14px;line-height:22px;">${c.closing}</p><a href="mailto:${escape(encodeURIComponent(replyAddress))}" style="color:#f7f7f2;font-size:14px;line-height:22px;text-decoration:underline;text-underline-offset:3px;">${c.write} →</a><p style="margin:18px 0 0;font-size:11px;line-height:18px;color:#c1c7b9;">${c.tagline}</p></td></tr>
 </table>
 <!--[if mso]></td></tr></table><![endif]-->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;"><tr><td style="padding:20px 16px 0;text-align:center;font-size:11px;line-height:18px;color:#666a60;">${c.note}</td></tr></table>
 </td></tr></table></body></html>`;
   return {
-    from, to: CONTACT_ADDRESS, cc: visitor,
-    replyTo: visitor.address.toLowerCase() === CONTACT_ADDRESS ? [CONTACT_ADDRESS] : [CONTACT_ADDRESS, visitor],
-    subject: `[Thermidor] ${c.subject} — ${topic}`, text, html,
+    from, to: agency ? CONTACT_ADDRESS : visitor,
+    replyTo: agency ? visitor : CONTACT_ADDRESS,
+    subject: `${c.subject} — ${topic}`, text, html,
     attachments: [{ filename: 'thermidor.png', content: logo, contentType: 'image/png', contentDisposition: 'inline', cid: logoCid }],
     disableFileAccess: true, disableUrlAccess: true
   };

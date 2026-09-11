@@ -32,7 +32,7 @@ Les anciens fichiers images non utilisés ne sont pas chargés par le nouveau si
 
 ## Emails de contact
 
-Le formulaire envoie un email HTML à `contact@thermidor-agence-web.fr` et place le visiteur en **CC**. Le message contient le logo intégré en PNG, un remerciement et la copie de la demande, dans la langue du formulaire. Une alternative texte est incluse. Le champ `Reply-To` contient Thermidor et le visiteur pour permettre de poursuivre l’échange depuis les deux boîtes.
+Le formulaire envoie deux emails HTML distincts avec le logo intégré en PNG et une alternative texte. L’agence reçoit une notification en français « Vous avez reçu une demande de contact sur Thermidor », avec les coordonnées et le message ; son `Reply-To` pointe vers le visiteur. Une fois cette notification acceptée par SMTP, le visiteur reçoit un remerciement et la copie de sa demande dans la langue du formulaire ; son `Reply-To` pointe vers Thermidor. Il n’y a plus de CC partagé.
 
 Si le serveur SMTP accepte la demande pour Thermidor mais refuse la copie, le formulaire confirme la transmission à l’agence et signale l’échec de la copie. L’acceptation SMTP ne garantit pas la remise finale : vérifier les événements de livraison dans Mailjet pour un envoi réel.
 
