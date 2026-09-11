@@ -131,7 +131,16 @@ export function createApp(overrides = {}) {
     const pairs = Object.keys(paths.fr).map(key => ({ fr: paths.fr[key], en: paths.en[key] }));
     for (const s of services) pairs.push({ fr: `${paths.fr.services}/${s.slug}`, en: `${paths.en.services}/${s.enSlug}` });
     for (const p of store.all(true)) pairs.push({ fr: `${paths.fr.projects}/${p.slug}`, en: `${paths.en.projects}/${p.slug}` });
-    res.type('application/xml').send(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${pairs.flatMap(pair => ['fr', 'en'].map(lang => `<url><loc>${escape(baseUrl + pair[lang])}</loc><xhtml:link rel="alternate" hreflang="fr" href="${escape(baseUrl + pair.fr)}"/><xhtml:link rel="alternate" hreflang="en" href="${escape(baseUrl + pair.en)}"/></url>`)).join('')}</urlset>`);
+    const entries = pairs.flatMap(pair => ['fr', 'en'].map(lang => `  <url>
+    <loc>${escape(baseUrl + pair[lang])}</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="${escape(baseUrl + pair.fr)}"/>
+    <xhtml:link rel="alternate" hreflang="en" href="${escape(baseUrl + pair.en)}"/>
+  </url>`));
+    res.type('application/xml').send(`<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/css" href="/sitemap.css"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${entries.join('\n')}
+</urlset>\n`);
   });
   app.use((req, res) => {
     if (req.method !== 'GET' && req.method !== 'HEAD') return res.status(405).send('Method not allowed');

@@ -1,0 +1,33 @@
+@namespace sitemap url("http://www.sitemaps.org/schemas/sitemap/0.9");
+@namespace xhtml url("http://www.w3.org/1999/xhtml");
+
+sitemap|urlset {
+  display: block;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  background: #f7f7f2;
+  color: #242820;
+  font: 14px/1.7 system-ui, sans-serif;
+}
+
+sitemap|urlset::before {
+  content: "Thermidor — Sitemap XML";
+  display: block;
+  margin-bottom: 24px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+sitemap|url {
+  display: block;
+  padding: 12px 0;
+  border-bottom: 1px solid #d9dbd1;
+}
+
+sitemap|loc {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+xhtml|link { display: none; }
