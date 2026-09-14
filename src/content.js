@@ -65,12 +65,13 @@ export const initialProjects = [
 
 export const copy = {
   fr: {
-    nav: ['Expertises', 'Projets', 'L’agence'], contact: 'Parlons de votre projet', allProjects: 'Tous les projets', discover: 'Découvrir le projet',
+    nav: ['Expertises', 'Clients', 'Apps', 'L’agence'], contact: 'Parlons de votre projet', allProjects: 'Tous les clients', discover: 'Découvrir le projet',
+    appsLabel: 'Les applications Thermidor', appsTitle: 'Des apps.<br>À portée de main.', appsIntro: 'Découvrez nos applications, leurs usages et leurs fonctionnalités.', appsEmpty: 'Nos applications seront bientôt présentées ici.', appDiscover: 'Découvrir l’app', appBack: 'Retour aux apps', appVisit: 'Ouvrir l’app', appContext: 'L’app en quelques mots', appSelection: 'Application Thermidor',
     eyebrow: 'Agence digitale indépendante · Lille, France & Europe',
     hero: 'Des idées claires.<br>Du digital <em>qui compte.</em>',
     intro: 'Nous concevons des sites, des logiciels et des applications utiles. Du premier échange à la mise en ligne, la même exigence : faire simple, juste et durable.',
-    seeProjects: 'Explorer nos projets', heroAside: 'La technique au service<br>de votre ambition.',
-    selected: 'Une sélection de collaborations', projectsTitle: 'Des projets.<br>Du concret.',
+    seeProjects: 'Découvrir nos clients', heroAside: 'La technique au service<br>de votre ambition.',
+    selected: 'Une sélection de collaborations', projectsTitle: 'Des clients.<br>Des liens durables.',
     projectsIntro: 'Des univers différents. Une même attention portée à ce qui rend chaque projet singulier.',
     expertiseLabel: 'Ce que nous faisons', expertiseTitle: 'De la vision<br>à la réalisation.',
     expertiseIntro: 'Les bonnes compétences, au bon moment. Nous vous accompagnons sur l’ensemble de votre projet ou sur un besoin précis.',
@@ -81,19 +82,20 @@ export const copy = {
     contactLabel: 'Tout commence par une conversation', contactTitle: 'Et si on faisait<br><em>avancer votre idée ?</em>',
     contactText: 'Un projet en tête, une question technique ou simplement l’envie d’échanger ? Racontez-nous.',
     name: 'Votre nom', email: 'Votre email', company: 'Entreprise (facultatif)', need: 'Votre besoin', message: 'Parlez-nous de votre projet', send: 'Envoyer le message', choose: 'Sélectionner un sujet',
-    privacyForm: 'Vos informations servent uniquement à traiter votre demande. Vous recevrez une copie par email.', privacy: 'Confidentialité', legal: 'Mentions légales', back: 'Retour aux projets', visit: 'Visiter le site',
+    privacyForm: 'Vos informations servent uniquement à traiter votre demande. Vous recevrez une copie par email.', privacy: 'Confidentialité', legal: 'Mentions légales', back: 'Retour aux clients', visit: 'Visiter le site',
     footer: 'Du sens dans les idées.<br>Du soin dans le digital.', rights: 'Tous droits réservés.', location: 'Lille · France · Europe',
     aboutTitle: 'Une vision d’ensemble.<br>Le soin du détail.', aboutIntro: 'Thermidor accompagne les entreprises, les indépendants et les agences dans leurs projets numériques. Du développement fullstack à la gouvernance, nous faisons le lien entre votre vision et sa réalisation.',
     notFound: 'Cette page a pris un autre chemin.', home: 'Retour à l’accueil', included: 'Comment nous vous accompagnons', related: 'À découvrir aussi', menu: 'Ouvrir le menu', close: 'Fermer le menu',
-    projectContext: 'Le projet en quelques mots', projectSelection: 'Projet sélectionné', serviceCta: 'Échangeons sur votre besoin',
+    projectContext: 'Le projet en quelques mots', projectSelection: 'Collaboration client', serviceCta: 'Échangeons sur votre besoin',
   },
   en: {
-    nav: ['Expertise', 'Projects', 'About'], contact: 'Let’s talk about your project', allProjects: 'All projects', discover: 'Explore the project',
+    nav: ['Expertise', 'Clients', 'Apps', 'About'], contact: 'Let’s talk about your project', allProjects: 'All clients', discover: 'Explore the project',
+    appsLabel: 'Thermidor applications', appsTitle: 'Useful apps.<br>At your fingertips.', appsIntro: 'Explore our applications, what they do and how to use them.', appsEmpty: 'Our applications will be featured here soon.', appDiscover: 'Explore the app', appBack: 'Back to apps', appVisit: 'Open the app', appContext: 'About the app', appSelection: 'Thermidor application',
     eyebrow: 'Independent digital agency · Lille, France & Europe',
     hero: 'Clear ideas.<br>Digital <em>that matters.</em>',
     intro: 'We build useful websites, software and applications. From our first conversation to launch, one shared ambition: make it simple, thoughtful and lasting.',
-    seeProjects: 'Explore our projects', heroAside: 'Technology in service<br>of your ambition.',
-    selected: 'Selected collaborations', projectsTitle: 'Real projects.<br>Thoughtfully built.',
+    seeProjects: 'Meet our clients', heroAside: 'Technology in service<br>of your ambition.',
+    selected: 'Selected collaborations', projectsTitle: 'Our clients.<br>Lasting partnerships.',
     projectsIntro: 'Different worlds. The same attention to what makes each project distinctive.',
     expertiseLabel: 'What we do', expertiseTitle: 'From vision<br>to reality.',
     expertiseIntro: 'The right expertise, at the right time. We can support your entire project or help with a specific need.',
@@ -104,15 +106,15 @@ export const copy = {
     contactLabel: 'It starts with a conversation', contactTitle: 'Let’s move<br><em>your idea forward.</em>',
     contactText: 'A project in mind, a technical question, or just a conversation? Tell us about it.',
     name: 'Your name', email: 'Your email', company: 'Company (optional)', need: 'What do you need?', message: 'Tell us about your project', send: 'Send message', choose: 'Select a topic',
-    privacyForm: 'Your information is only used to handle your enquiry. You will receive a copy by email.', privacy: 'Privacy', legal: 'Legal notice', back: 'Back to projects', visit: 'Visit website',
+    privacyForm: 'Your information is only used to handle your enquiry. You will receive a copy by email.', privacy: 'Privacy', legal: 'Legal notice', back: 'Back to clients', visit: 'Visit website',
     footer: 'Purpose in every idea.<br>Care in every detail.', rights: 'All rights reserved.', location: 'Lille · France · Europe',
     aboutTitle: 'The bigger picture.<br>Attention to detail.', aboutIntro: 'Thermidor supports businesses, independent professionals and agencies with their digital projects. From fullstack development to project governance, we connect your vision with its implementation.',
     notFound: 'This page has taken another path.', home: 'Back to home', included: 'How we can help', related: 'You may also be interested in', menu: 'Open menu', close: 'Close menu',
-    projectContext: 'About the project', projectSelection: 'Selected project', serviceCta: 'Let’s discuss your needs',
+    projectContext: 'About the project', projectSelection: 'Client collaboration', serviceCta: 'Let’s discuss your needs',
   }
 };
 
 export const paths = {
-  fr: { home: '/', services: '/expertises', projects: '/projets', about: '/agence', contact: '/contact', privacy: '/confidentialite', legal: '/mentions-legales' },
-  en: { home: '/en', services: '/en/expertise', projects: '/en/projects', about: '/en/about', contact: '/en/contact', privacy: '/en/privacy', legal: '/en/legal' }
+  fr: { home: '/', services: '/expertises', projects: '/clients', apps: '/apps', about: '/agence', contact: '/contact', privacy: '/confidentialite', legal: '/mentions-legales' },
+  en: { home: '/en', services: '/en/expertise', projects: '/en/clients', apps: '/en/apps', about: '/en/about', contact: '/en/contact', privacy: '/en/privacy', legal: '/en/legal' }
 };

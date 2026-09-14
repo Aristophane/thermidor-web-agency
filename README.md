@@ -1,6 +1,6 @@
 # Thermidor — site vitrine bilingue
 
-Site public français / anglais, six expertises, portfolio, formulaire de contact et administration des projets. Rendu HTML côté serveur avec Express, SQLite intégré à Node 24, images WebP via Sharp, email SMTP avec Nodemailer. Aucun framework JavaScript côté public, aucun service de contenu externe.
+Site public français / anglais, six expertises, pages Clients et Apps, formulaire de contact et administration des fiches. Rendu HTML côté serveur avec Express, SQLite intégré à Node 24, images WebP via Sharp, email SMTP avec Nodemailer. Aucun framework JavaScript côté public, aucun service de contenu externe.
 
 ## Lancer en local
 
@@ -26,7 +26,9 @@ Les pages et expertises FR/EN sont définies dans `src/content.js`, les template
 
 Les trois références initiales sont SNV, Maison Charlet et Junaki. Leurs visuels sont de vraies captures des sites fournis, converties en WebP et hébergées localement. Les descriptions présentent leurs activités ; aucun résultat chiffré, témoignage, date de réalisation ou détail d’intervention non confirmé n’a été inventé.
 
-Les projets sont initialisés une seule fois dans `data/thermidor.sqlite`. Les modifier ensuite dans l’administration, pas dans les données de départ. L’administration permet de créer, modifier, ordonner, publier/dépublier et supprimer un projet. Les champs français et anglais sont obligatoires. L’image importée est validée, débarrassée de ses métadonnées et convertie en WebP ; maximum 8 Mo et 40 mégapixels en entrée.
+Les clients sont initialisés une seule fois dans `data/thermidor.sqlite`. Les modifier ensuite dans l’administration, pas dans les données de départ. Les onglets **Clients** (`/admin/clients`) et **Apps** (`/admin/apps`) permettent chacun de créer, modifier, ordonner, publier/dépublier et supprimer leurs fiches. Les champs français et anglais sont obligatoires. L’image importée est validée, débarrassée de ses métadonnées et convertie en WebP ; maximum 8 Mo et 40 mégapixels en entrée.
+
+Les clients existants restent dans la table `projects`. La table `apps`, indépendante et vide au départ, est créée automatiquement au démarrage. Les pages publiques sont `/clients`, `/en/clients`, `/apps` et `/en/apps`, avec une page de détail par fiche publiée. Les anciennes adresses `/projets` et `/en/projects`, y compris leurs fiches, redirigent définitivement vers Clients. Les anciennes routes d’administration `/admin/projects` restent compatibles.
 
 Les anciens fichiers images non utilisés ne sont pas chargés par le nouveau site. Les médias importés ne sont pas supprimés automatiquement lors de la suppression d’un projet, pour éviter de casser une image réutilisée. Prévoir un nettoyage périodique des fichiers orphelins si nécessaire.
 
@@ -39,6 +41,8 @@ Si le serveur SMTP accepte la demande pour Thermidor mais refuse la copie, le fo
 Prévisualisation locale sans envoyer d’email : `node scripts/preview-contact-email.js`. Les fichiers HTML, EML et captures FR/EN sont générés dans `artifacts/email/`.
 
 ## Installer sur Coolify
+
+La connexion Google de l’admin est disponible après configuration du client OAuth et de l’adresse autorisée. Voir [le guide Google OAuth](deploy/GOOGLE-OAUTH.md). URI de redirection : `https://thermidor-agence-web.fr/admin/auth/google/callback`.
 
 Pour le VPS géré avec Coolify, suivre [le guide dédié](deploy/COOLIFY.md). Sélectionner le build pack **Docker Compose**, avec **Docker Compose Location** `/compose.coolify.yaml` et le domaine du service `app` **`https://thermidor-agence-web.fr:3000`**. `BASE_URL` reste **`https://thermidor-agence-web.fr`**, sans le port interne.
 
@@ -73,7 +77,7 @@ Mettre à jour avec `docker compose up -d --build` après sauvegarde. Ne pas uti
 - URL française et anglaise distincte pour chaque page et chaque projet.
 - Titres, descriptions, canonical, hreflang FR/EN et x-default.
 - Données structurées Organization, Service et BreadcrumbList selon les pages.
-- Sitemap dynamique : les brouillons sont exclus, les projets publiés sont inclus immédiatement.
+- Sitemap dynamique : les brouillons sont exclus, les clients et apps publiés sont inclus immédiatement.
 - Redirection permanente de `/service` vers `/expertises` et des anciennes URL HTML.
 - Une seule balise H1 par page ; contenu et liens disponibles sans JavaScript.
 - CSS, police variable Manrope sous licence OFL et images servis localement.
@@ -87,11 +91,14 @@ Les balises techniques ne garantissent pas un classement. Après mise en ligne, 
 ```sh
 npm test
 node scripts/verify-browser.js
+node scripts/verify-clients-apps.mjs
 ```
 
 La suite Node vérifie le rendu bilingue, les redirections, les erreurs 404, les protections des formulaires, la connexion administrateur, la publication des brouillons, l’échappement HTML, l’upload d’images et la révocation de session.
 
 La vérification navigateur nécessite le serveur local actif, les identifiants générés par `setup-local.js` et Microsoft Edge installé. Elle vérifie les écrans desktop/mobile, le menu, le formulaire non connecté au SMTP, la connexion admin et l’accessibilité avec axe. Rapports et captures dans `artifacts/qa/`.
+
+La vérification Clients/Apps lance son propre serveur de test sur le port 3147 avec une base en mémoire et nécessite Microsoft Edge. Elle vérifie six largeurs d’écran, la création d’une app, l’import de visuel, la publication, le changement de langue, la suppression et l’accessibilité. Captures dans `artifacts/qa-clients-apps/`.
 
 Les tests SMTP utilisent un transport simulé et n’envoient aucun email. Un envoi réel et la réception dans la boîte de destination restent à vérifier après configuration SMTP. Le déploiement Docker/HTTPS doit également être vérifié sur le VPS ; il n’a pas été exécuté depuis ce workspace.
 

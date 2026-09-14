@@ -10,12 +10,14 @@ import { adminPage } from './admin-views.js';
 import { services, paths } from './content.js';
 import { contactEmail, CONTACT_ADDRESS } from './contact-email.js';
 import { randomToken, digest, verifyPassword, formToken, checkFormToken, limiter } from './security.js';
+import { googleAuthConfig, mountGoogleAuth } from './google-auth.js';
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 export function createApp(overrides = {}) {
   const env = { ...process.env, ...overrides.env }, production = env.NODE_ENV === 'production';
   const baseUrl = (env.BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
-  if (production && (!env.SESSION_SECRET || env.SESSION_SECRET.length < 32 || !env.ADMIN_PASSWORD_HASH || !env.ADMIN_EMAIL || !baseUrl.startsWith('https://'))) throw new Error('Production requires HTTPS BASE_URL, SESSION_SECRET (32+ characters), ADMIN_EMAIL and ADMIN_PASSWORD_HASH.');
+  const google = googleAuthConfig(env, baseUrl);
+  if (production && (!env.SESSION_SECRET || env.SESSION_SECRET.length < 32 || !(google.enabled || (env.ADMIN_PASSWORD_HASH && env.ADMIN_EMAIL)) || !baseUrl.startsWith('https://'))) throw new Error('Production requires HTTPS BASE_URL, SESSION_SECRET (32+ characters), and configured password or Google admin authentication.');
   const secret = env.SESSION_SECRET || randomToken();
   const store = overrides.store || createStore(resolve(env.DATABASE_PATH || join(root, 'data/thermidor.sqlite')));
   const uploadDir = resolve(env.UPLOAD_DIR || join(root, 'public/uploads'));
@@ -53,36 +55,52 @@ export function createApp(overrides = {}) {
     next();
   };
   const cookieOptions = { httpOnly: true, secure: production, sameSite: 'strict', path: '/admin' };
+  const startSession = (req, res, sameSite = 'strict') => {
+    const token = randomToken();
+    store.db.prepare('DELETE FROM sessions WHERE expires < ? OR id = ?').run(Date.now(), digest(readCookie(req, 'thermidor_session')));
+    store.db.prepare('INSERT INTO sessions VALUES (?, ?, ?)').run(digest(token), randomToken(), Date.now() + 8 * 60 * 60 * 1000);
+    res.cookie('thermidor_session', token, { ...cookieOptions, sameSite, maxAge: 8 * 60 * 60 * 1000 });
+    res.clearCookie('thermidor_login', cookieOptions);
+  };
   const adminRender = (req, res, options) => res.send(adminPage({ csrf: req.adminSession?.csrf, smtpReady, ...options }));
   app.use('/admin', (req, res, next) => { res.set({ 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow' }); next(); });
   app.get('/admin/login', (req, res) => {
     const csrf = formToken(secret); res.cookie('thermidor_login', csrf, { ...cookieOptions, maxAge: 3600000 });
-    adminRender(req, res, { page: 'login', csrf, configured: Boolean(env.ADMIN_PASSWORD_HASH), error: req.query.error ? 'Identifiants incorrects ou formulaire expiré.' : '' });
+    const loginErrors = { google: 'Connexion Google refusée ou expirée. Utilisez le compte administrateur autorisé et réessayez.', google_unavailable: 'La connexion Google n’est pas encore configurée sur le serveur.' };
+    const error = req.query.error === 'google' || req.query.error === 'google_unavailable' ? loginErrors[req.query.error] : req.query.error ? 'Identifiants incorrects ou formulaire expiré.' : '';
+    adminRender(req, res, { page: 'login', csrf, configured: Boolean(env.ADMIN_PASSWORD_HASH && env.ADMIN_EMAIL), googleEnabled: google.enabled, error });
   });
   app.post('/admin/login', sameOrigin, limiter({ windowMs: 15 * 60 * 1000, max: 8 }), async (req, res) => {
     const validCsrf = checkFormToken(req.body.csrf, secret) && req.body.csrf === readCookie(req, 'thermidor_login');
     const validPassword = validCsrf && await verifyPassword(req.body.password, env.ADMIN_PASSWORD_HASH);
     if (!validPassword || typeof req.body.email !== 'string' || req.body.email.toLowerCase() !== (env.ADMIN_EMAIL || '').toLowerCase()) return res.redirect(303, '/admin/login?error=1');
-    const token = randomToken();
-    store.db.prepare('DELETE FROM sessions WHERE expires < ?').run(Date.now());
-    store.db.prepare('INSERT INTO sessions VALUES (?, ?, ?)').run(digest(token), randomToken(), Date.now() + 8 * 60 * 60 * 1000);
-    res.cookie('thermidor_session', token, { ...cookieOptions, maxAge: 8 * 60 * 60 * 1000 });
-    res.clearCookie('thermidor_login', cookieOptions); res.redirect(303, '/admin');
+    startSession(req, res); res.redirect(303, '/admin');
   });
+  mountGoogleAuth(app, { config: google, store, production, readCookie, startSession, client: overrides.googleClient });
   app.get('/admin', loadSession, (req, res) => adminRender(req, res, { projects: store.all(), saved: req.query.saved === '1' }));
   app.post('/admin/logout', sameOrigin, loadSession, csrfGuard, (req, res) => { store.db.prepare('DELETE FROM sessions WHERE id = ?').run(req.adminSession.id); res.clearCookie('thermidor_session', cookieOptions); res.redirect(303, '/admin/login'); });
-  app.get('/admin/projects/new', loadSession, (req, res) => adminRender(req, res, { page: 'edit' }));
-  app.get('/admin/projects/:id', loadSession, (req, res) => {
-    const project = store.byId(req.params.id); if (!project) return res.status(404).send('Projet introuvable.');
-    adminRender(req, res, { page: 'edit', project });
-  });
-  app.post('/admin/projects/:id', sameOrigin, loadSession, csrfGuard, (req, res) => {
-    const id = req.params.id === 'new' ? null : req.params.id;
-    if (id && !store.byId(id)) return res.status(404).send('Projet introuvable.');
-    try { const project = validateProject(req.body, uploadDir); store.save(project, id); res.redirect(303, '/admin?saved=1'); }
-    catch (error) { res.status(400); adminRender(req, res, { page: 'edit', project: { ...req.body, id }, error: error.message.includes('UNIQUE') ? 'Cette adresse de page existe déjà. Choisissez-en une autre.' : error.message }); }
-  });
-  app.post('/admin/projects/:id/delete', sameOrigin, loadSession, csrfGuard, (req, res) => { store.remove(req.params.id); res.redirect(303, '/admin?saved=1'); });
+  for (const route of ['clients', 'apps', 'projects']) {
+    const collection = route === 'apps' ? 'apps' : 'clients';
+    const records = collection === 'apps' ? store.apps : store;
+    const listUrl = `/admin/${collection}`;
+    const missing = collection === 'apps' ? 'App introuvable.' : 'Client introuvable.';
+    app.get(`/admin/${route}`, loadSession, (req, res) => adminRender(req, res, { collection, projects: records.all(), saved: req.query.saved === '1' }));
+    app.get(`/admin/${route}/new`, loadSession, (req, res) => adminRender(req, res, { page: 'edit', collection }));
+    app.get(`/admin/${route}/:id`, loadSession, (req, res) => {
+      const project = records.byId(req.params.id); if (!project) return res.status(404).send(missing);
+      adminRender(req, res, { page: 'edit', collection, project });
+    });
+    app.post(`/admin/${route}/:id`, sameOrigin, loadSession, csrfGuard, (req, res) => {
+      const id = req.params.id === 'new' ? null : req.params.id;
+      if (id && !records.byId(id)) return res.status(404).send(missing);
+      try { const project = validateProject(req.body, uploadDir); records.save(project, id); res.redirect(303, `${listUrl}?saved=1`); }
+      catch (error) { res.status(400); adminRender(req, res, { page: 'edit', collection, project: { ...req.body, id }, error: error.message.includes('UNIQUE') ? 'Cette adresse de page existe déjà. Choisissez-en une autre.' : error.message }); }
+    });
+    app.post(`/admin/${route}/:id/delete`, sameOrigin, loadSession, csrfGuard, (req, res) => {
+      if (!records.byId(req.params.id)) return res.status(404).send(missing);
+      records.remove(req.params.id); res.redirect(303, `${listUrl}?saved=1`);
+    });
+  }
   app.post('/admin/upload', sameOrigin, loadSession, csrfGuard, limiter({ windowMs: 60000, max: 12 }), express.raw({ type: ['image/jpeg', 'image/png', 'image/webp'], limit: '8mb' }), async (req, res) => {
     if (!Buffer.isBuffer(req.body) || !req.body.length) return res.status(400).json({ message: 'Choisissez un fichier JPG, PNG ou WebP.' });
     try {
@@ -125,12 +143,17 @@ export function createApp(overrides = {}) {
   });
   const legacy = { '/service': '/expertises', '/services': '/expertises', '/index.html': '/en', '/index-fr.html': '/', '/services-fr.html': '/expertises', '/services.html': '/en/expertise', '/work.html': '/en/projects', '/projets-web-seo.html': '/projets' };
   for (const [from, to] of Object.entries(legacy)) app.get(from, (req, res) => res.redirect(301, to));
+  for (const [from, to] of [['/projets', paths.fr.projects], ['/en/projects', paths.en.projects]]) {
+    app.get(from, (req, res) => res.redirect(301, to));
+    app.get(`${from}/:slug`, (req, res) => res.redirect(301, `${to}/${encodeURIComponent(req.params.slug)}`));
+  }
   app.get('/healthz', (req, res) => { store.db.prepare('SELECT 1').get(); res.json({ status: 'ok' }); });
   app.get('/robots.txt', (req, res) => res.type('text').send(`User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/\nSitemap: ${baseUrl}/sitemap.xml\n`));
   app.get('/sitemap.xml', (req, res) => {
     const pairs = Object.keys(paths.fr).map(key => ({ fr: paths.fr[key], en: paths.en[key] }));
     for (const s of services) pairs.push({ fr: `${paths.fr.services}/${s.slug}`, en: `${paths.en.services}/${s.enSlug}` });
     for (const p of store.all(true)) pairs.push({ fr: `${paths.fr.projects}/${p.slug}`, en: `${paths.en.projects}/${p.slug}` });
+    for (const p of store.apps.all(true)) pairs.push({ fr: `${paths.fr.apps}/${p.slug}`, en: `${paths.en.apps}/${p.slug}` });
     const entries = pairs.flatMap(pair => ['fr', 'en'].map(lang => `  <url>
     <loc>${escape(baseUrl + pair[lang])}</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="${escape(baseUrl + pair.fr)}"/>
@@ -149,10 +172,11 @@ ${entries.join('\n')}
     const lang = pathname === '/en' || pathname.startsWith('/en/') ? 'en' : 'fr';
     let page = Object.entries(paths[lang]).find(([, path]) => path === pathname)?.[0], project, service;
     if (!page && pathname.startsWith(paths[lang].projects + '/')) { project = store.bySlug(pathname.slice(paths[lang].projects.length + 1)); if (project) page = 'project'; }
+    if (!page && pathname.startsWith(paths[lang].apps + '/')) { project = store.apps.bySlug(pathname.slice(paths[lang].apps.length + 1)); if (project) page = 'app'; }
     if (!page && pathname.startsWith(paths[lang].services + '/')) { service = services.find(s => (lang === 'fr' ? s.slug : s.enSlug) === pathname.slice(paths[lang].services.length + 1)); if (service) page = 'service'; }
     if (!page) res.status(404);
     res.set('Cache-Control', 'no-cache');
-    res.send(renderPage({ lang, page: page || '404', project, service, projects: store.all(true), token: formToken(secret), baseUrl, legal: { company: env.LEGAL_COMPANY, address: env.LEGAL_ADDRESS, registration: env.LEGAL_REGISTRATION, director: env.LEGAL_DIRECTOR, host: env.LEGAL_HOST } }));
+    res.send(renderPage({ lang, page: page || '404', project, service, projects: store.all(true), apps: store.apps.all(true), token: formToken(secret), baseUrl, legal: { company: env.LEGAL_COMPANY, address: env.LEGAL_ADDRESS, registration: env.LEGAL_REGISTRATION, director: env.LEGAL_DIRECTOR, host: env.LEGAL_HOST } }));
   });
   app.use((error, req, res, next) => {
     console.error('Request failed:', error.type || error.code || 'internal_error');

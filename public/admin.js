@@ -1,4 +1,4 @@
-document.querySelectorAll('[data-delete-form]').forEach(form => form.addEventListener('submit', event => { if (!confirm(`Supprimer définitivement le projet « ${form.dataset.title} » ?`)) event.preventDefault(); }));
+document.querySelectorAll('[data-delete-form]').forEach(form => form.addEventListener('submit', event => { if (!confirm(`Supprimer définitivement la fiche « ${form.dataset.title} » ?`)) event.preventDefault(); }));
 const editor = document.querySelector('[data-project-form]');
 let dirty = false;
 editor?.addEventListener('input', () => { dirty = true; });
@@ -13,7 +13,7 @@ document.querySelector('[data-image-upload]')?.addEventListener('change', async 
   try {
     const response = await fetch('/admin/upload', { method: 'POST', headers: { 'Content-Type': file.type, 'X-CSRF-Token': editor.elements.csrf.value }, body: file });
     const result = await response.json(); if (!response.ok) throw new Error(result.message);
-    document.querySelector('[data-image-preview]').src = result.path; document.querySelector('[data-image-path]').value = result.path; dirty = true; status.textContent = 'Image prête. Enregistrez le projet pour la publier.';
+    document.querySelector('[data-image-preview]').src = result.path; document.querySelector('[data-image-path]').value = result.path; dirty = true; status.textContent = 'Image prête. Enregistrez la fiche pour la publier.';
   } catch (error) { status.textContent = error.message || 'L’import a échoué. Réessayez.'; }
   finally { submit.disabled = false; event.target.disabled = false; }
 });

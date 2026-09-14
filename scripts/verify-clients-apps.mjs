@@ -1,0 +1,88 @@
+import { chromium } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+import assert from 'node:assert/strict';
+import { once } from 'node:events';
+import { mkdirSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { createApp } from '../src/server.js';
+import { createStore } from '../src/store.js';
+import { hashPassword } from '../src/security.js';
+
+const base = 'http://127.0.0.1:3147';
+const output = resolve('artifacts/qa-clients-apps');
+mkdirSync(output, { recursive: true });
+const store = createStore(':memory:');
+const { app } = createApp({ store, env: { NODE_ENV: 'test', BASE_URL: base, ADMIN_EMAIL: 'browser@example.com', ADMIN_PASSWORD_HASH: await hashPassword('browser-test-password-123'), SESSION_SECRET: 'browser-test-secret-at-least-32-characters', UPLOAD_DIR: resolve('artifacts/test-uploads'), SMTP_HOST: '', SMTP_FROM: '' } });
+const server = app.listen(3147, '127.0.0.1'); await once(server, 'listening');
+let browser;
+try {
+  browser = await chromium.launch({ channel: 'msedge', headless: true });
+  const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+  const page = await context.newPage();
+  const errors = []; page.on('pageerror', error => errors.push(error.message));
+  const noOverflow = async label => assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), label);
+  for (const width of [320, 390, 768, 900, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 1000 });
+    for (const path of ['/clients', '/apps', '/en/apps']) {
+      assert.equal((await page.goto(base + path)).status(), 200);
+      await noOverflow(`${path} at ${width}`);
+    }
+  }
+  await page.goto(base + '/apps');
+  await page.screenshot({ path: `${output}/apps-desktop.png` });
+  await page.locator('.desktop-nav').getByRole('link', { name: 'Clients', exact: true }).click();
+  assert.ok(page.url().endsWith('/clients'));
+  await page.screenshot({ path: `${output}/clients-desktop.png` });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole('button', { name: 'Ouvrir le menu' }).click();
+  await page.locator('#mobile-nav').getByRole('link', { name: 'Apps' }).click();
+  assert.ok(page.url().endsWith('/apps'));
+  await page.screenshot({ path: `${output}/apps-mobile.png` });
+  await page.goto(base + '/admin');
+  await page.getByLabel('Adresse email').fill('browser@example.com');
+  await page.getByLabel('Mot de passe').fill('browser-test-password-123');
+  await page.getByRole('button', { name: 'Se connecter' }).click();
+  await page.waitForURL(base + '/admin');
+  await page.locator('.admin-tabs').getByRole('link', { name: 'Apps' }).click();
+  await page.getByRole('link', { name: 'Ajouter une app' }).click();
+  await page.getByLabel('Nom de l’app').fill('App de démonstration');
+  await page.getByLabel('Adresse de la page').fill('demo-app');
+  await page.getByLabel('Lien vers l’app').fill('https://example.com/app');
+  await page.getByLabel('Secteur / catégorie affichée').fill('Productivité');
+  await page.getByLabel('Phrase de présentation').fill('Une application pour organiser vos idées.');
+  await page.getByLabel('Description de l’app').fill('Retrouvez vos idées et vos notes dans un même espace.');
+  await page.getByLabel('Sector / displayed category').fill('Productivity');
+  await page.getByLabel('Introductory sentence').fill('An application to organise your ideas.');
+  await page.getByLabel('App description').fill('Keep your ideas and notes together in one place.');
+  await page.getByLabel('Importer une image').setInputFiles(resolve('public/media/social.png'));
+  await page.getByRole('status').filter({ hasText: 'Image prête' }).waitFor();
+  await noOverflow('Mobile app editor');
+  await page.screenshot({ path: `${output}/admin-app-mobile.png`, fullPage: true });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.screenshot({ path: `${output}/admin-app-desktop.png`, fullPage: true });
+  let axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+  assert.deepEqual(axe.violations.map(v => v.id), [], 'Editor accessibility');
+  await page.getByRole('button', { name: 'Enregistrer l’app' }).click();
+  await page.waitForURL(base + '/admin/apps?saved=1');
+  assert.equal(store.apps.all()[0].published, 0);
+  await page.getByRole('link', { name: 'Modifier' }).click();
+  await page.getByLabel('Statut').selectOption('1');
+  await page.getByRole('button', { name: 'Enregistrer l’app' }).click();
+  await page.waitForURL(base + '/admin/apps?saved=1');
+  await page.screenshot({ path: `${output}/admin-apps-list.png` });
+  await page.goto(base + '/apps');
+  await page.getByRole('link', { name: 'App de démonstration', exact: true }).click();
+  assert.ok(page.url().endsWith('/apps/demo-app'));
+  assert.equal(await page.getByRole('link', { name: 'Ouvrir l’app' }).getAttribute('href'), 'https://example.com/app');
+  await page.getByRole('link', { name: 'Read this page in English' }).click();
+  assert.ok(page.url().endsWith('/en/apps/demo-app'));
+  axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+  assert.deepEqual(axe.violations.map(v => v.id), [], 'Public app accessibility');
+  await page.goto(base + '/admin/apps');
+  page.once('dialog', dialog => dialog.accept());
+  await page.getByRole('button', { name: 'Supprimer App de démonstration' }).click();
+  await page.waitForURL(base + '/admin/apps?saved=1');
+  assert.equal(store.apps.all().length, 0); assert.equal(store.all().length, 3);
+  assert.deepEqual(errors, []);
+  console.log('Browser checks passed: navigation at 6 widths, app editor/upload/publishing/deletion, language switch, accessibility, no JS errors.');
+} finally { await browser?.close(); await new Promise(resolve => server.close(resolve)); store.close(); }

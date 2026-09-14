@@ -36,7 +36,10 @@ Coolify détecte les variables présentes dans le Compose. Les renseigner comme 
 | --- | --- |
 | `BASE_URL` | `https://thermidor-agence-web.fr` |
 | `ADMIN_EMAIL` | `contact@thermidor-agence-web.fr`, ou votre email administrateur |
-| `ADMIN_PASSWORD_HASH` | Hash généré ci-dessous, à copier intégralement |
+| `ADMIN_PASSWORD_HASH` | Hash généré ci-dessous ; facultatif si Google est configuré |
+| `GOOGLE_CLIENT_ID` | ID du client OAuth Google de type Application Web (facultatif) |
+| `GOOGLE_CLIENT_SECRET` | Secret OAuth Google, variable d’exécution uniquement |
+| `GOOGLE_ADMIN_EMAIL` | Adresse Google exacte autorisée ; par défaut `ADMIN_EMAIL` |
 | `SESSION_SECRET` | Valeur aléatoire d’au moins 32 caractères, stable entre redéploiements |
 | `SMTP_HOST` | Hôte de votre serveur mail |
 | `SMTP_PORT` | `587` pour STARTTLS, ou `465` pour TLS direct |
@@ -50,7 +53,7 @@ Coolify détecte les variables présentes dans le Compose. Les renseigner comme 
 | `LEGAL_DIRECTOR` | Responsable de publication |
 | `LEGAL_HOST` | Identité et coordonnées de l’hébergeur |
 
-Les trois variables marquées `:?` dans Compose sont obligatoires : URL publique, hash du mot de passe et secret de session. Le serveur vérifie aussi la configuration de production au démarrage.
+Les deux variables marquées `:?` dans Compose sont obligatoires : URL publique et secret de session. Le serveur exige aussi une méthode d’authentification complète : email et hash du mot de passe, ou client OAuth Google et adresse autorisée. Voir [la configuration Google OAuth](GOOGLE-OAUTH.md). L’URI Google de production est `https://thermidor-agence-web.fr/admin/auth/google/callback`.
 
 Générer le hash du mot de passe sur la machine de développement, avec Node 24 :
 
