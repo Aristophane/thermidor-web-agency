@@ -152,7 +152,7 @@ ${entries.join('\n')}
     if (!page && pathname.startsWith(paths[lang].services + '/')) { service = services.find(s => (lang === 'fr' ? s.slug : s.enSlug) === pathname.slice(paths[lang].services.length + 1)); if (service) page = 'service'; }
     if (!page) res.status(404);
     res.set('Cache-Control', 'no-cache');
-    res.send(renderPage({ lang, page: page || '404', project, service, projects: store.all(true), token: formToken(secret), baseUrl, legal: { company: env.LEGAL_COMPANY, address: env.LEGAL_ADDRESS, registration: env.LEGAL_REGISTRATION, director: env.LEGAL_DIRECTOR, host: env.LEGAL_HOST } }));
+    res.send(renderPage({ lang, page: page || '404', project, service, projects: store.all(true), token: formToken(secret), baseUrl, legal: { company: env.LEGAL_COMPANY, address: env.LEGAL_ADDRESS, registration: env.LEGAL_REGISTRATION, director: env.LEGAL_DIRECTOR, host: env.LEGAL_HOST, phone: env.LEGAL_PHONE } }));
   });
   app.use((error, req, res, next) => {
     console.error('Request failed:', error.type || error.code || 'internal_error');
