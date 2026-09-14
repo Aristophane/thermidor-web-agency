@@ -33,7 +33,6 @@ services:
       LEGAL_REGISTRATION: ${LEGAL_REGISTRATION:-}
       LEGAL_DIRECTOR: ${LEGAL_DIRECTOR:-}
       LEGAL_HOST: ${LEGAL_HOST:-}
-      LEGAL_PHONE: ${LEGAL_PHONE:-}
     volumes:
       - thermidor_data:/app/data
       - thermidor_uploads:/app/public/uploads
