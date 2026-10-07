@@ -1,6 +1,7 @@
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { once } from 'node:events';
+import { request } from 'node:http';
 import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import sharp from 'sharp';
@@ -39,6 +40,32 @@ test('Legacy URLs redirect and missing routes return real 404 status', async () 
   assert.equal((await fetch(base + '/not-a-page')).status, 404);
   assert.equal((await fetch(base + '/.env')).status, 404);
   assert.equal((await fetch(base + '/src/server.js')).status, 404);
+});
+
+test('le domaine www rejoint le domaine canonique sans toucher aux formulaires ni au staging', async () => {
+  // fetch normalise l'en-tête Host dans certaines versions d'Undici.
+  const withHost = (path, options) => new Promise((resolve, reject) => {
+    const req = request(base + path, options, response => {
+      response.resume();
+      response.on('end', () => resolve({ status: response.statusCode, location: response.headers.location }));
+    });
+    req.on('error', reject);
+    req.end();
+  });
+  for (const method of ['GET', 'HEAD']) {
+    const response = await withHost('/expertises/integration-intelligence-artificielle?utm_source=google', {
+      method, headers: { Host: 'www.localhost:3000' },
+    });
+    assert.equal(response.status, 301);
+    assert.equal(response.location, origin + '/expertises/integration-intelligence-artificielle?utm_source=google');
+  }
+  for (const host of ['localhost:3000', 'preview.example.com', 'www.localhost:3000.evil.example']) {
+    const response = await withHost('/', { headers: { Host: host } });
+    assert.equal(response.status, 200);
+  }
+  const post = await withHost('/api/contact', { method: 'POST', headers: { Host: 'www.localhost:3000', Origin: 'https://unrelated.example' } });
+  assert.equal(post.status, 403);
+  assert.equal(post.location, undefined);
 });
 test('Contact validates token, origin and fields before passing a message to SMTP', async () => {
   let r = await post('/api/contact', validContact(), { Accept: 'application/json' }); assert.equal(r.status, 200); assert.equal(sent.length, 2);
