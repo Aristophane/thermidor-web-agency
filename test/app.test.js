@@ -17,7 +17,7 @@ const post = (path, data, headers = {}) => fetch(base + path, { method: 'POST', 
 const validContact = () => ({ token: formToken(secret), lang: 'fr', name: 'Camille', email: 'camille@example.com', message: 'Bonjour, je souhaite discuter de mon projet web.', company: '', need: 'developpement-web', website: '' });
 before(async () => {
   store = createStore(':memory:'); mkdirSync(uploadDir, { recursive: true });
-  const { app } = createApp({ store, env: { NODE_ENV: 'test', BASE_URL: origin, ADMIN_EMAIL: 'admin@example.com', ADMIN_PASSWORD_HASH: await hashPassword('a-long-test-password-123'), SESSION_SECRET: secret, UPLOAD_DIR: uploadDir, SMTP_FROM: 'test@example.com' }, mailer: { sendMail: async message => { sent.push(message); return { accepted: [typeof message.to === 'string' ? message.to : message.to.address] }; } } });
+  const { app } = createApp({ store, env: { NODE_ENV: 'test', BASE_URL: origin, TRUST_PROXY: '1', ADMIN_EMAIL: 'admin@example.com', ADMIN_PASSWORD_HASH: await hashPassword('a-long-test-password-123'), SESSION_SECRET: secret, UPLOAD_DIR: uploadDir, SMTP_FROM: 'test@example.com' }, mailer: { sendMail: async message => { sent.push(message); return { accepted: [typeof message.to === 'string' ? message.to : message.to.address] }; } } });
   server = app.listen(0, '127.0.0.1'); await once(server, 'listening'); base = `http://127.0.0.1:${server.address().port}`;
 });
 after(async () => { await new Promise(resolve => server.close(resolve)); store.close(); });
@@ -63,6 +63,9 @@ test('le domaine www rejoint le domaine canonique sans toucher aux formulaires n
     const response = await withHost('/', { headers: { Host: host } });
     assert.equal(response.status, 200);
   }
+  const proxy = await withHost('/confidentialite?utm_source=google', { headers: { Host: 'app:3000', 'X-Forwarded-Host': 'www.localhost:3000' } });
+  assert.equal(proxy.status, 301);
+  assert.equal(proxy.location, origin + '/confidentialite?utm_source=google');
   const post = await withHost('/api/contact', { method: 'POST', headers: { Host: 'www.localhost:3000', Origin: 'https://unrelated.example' } });
   assert.equal(post.status, 403);
   assert.equal(post.location, undefined);

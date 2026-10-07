@@ -39,7 +39,7 @@ export function createApp(overrides = {}) {
   app.use((req, res, next) => {
     if (['GET', 'HEAD'].includes(req.method) &&
         !canonicalUrl.hostname.startsWith('www.') &&
-        req.get('host')?.toLowerCase() === `www.${canonicalUrl.host}`) {
+        req.hostname.toLowerCase() === `www.${canonicalUrl.hostname}`) {
       return res.redirect(301, canonicalUrl.origin + req.originalUrl);
     }
     next();
