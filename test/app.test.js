@@ -59,7 +59,7 @@ test('le domaine www rejoint le domaine canonique sans toucher aux formulaires n
     assert.equal(response.status, 301);
     assert.equal(response.location, origin + '/expertises/integration-intelligence-artificielle?utm_source=google');
   }
-  for (const host of ['localhost:3000', 'preview.example.com', 'www.localhost:3000.evil.example']) {
+  for (const host of ['localhost:3000', 'preview.example.com', 'www.localhost.evil.example:3000']) {
     const response = await withHost('/', { headers: { Host: host } });
     assert.equal(response.status, 200);
   }
