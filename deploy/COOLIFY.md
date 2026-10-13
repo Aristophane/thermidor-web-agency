@@ -14,6 +14,8 @@ Pousser le projet dans votre dépôt Git, puis dans Coolify :
 
 Le dossier de build est la racine du dépôt. Il doit contenir `Dockerfile`, `package.json`, `package-lock.json`, `src/`, `public/` et `scripts/admin-password.js`. Les fichiers privés locaux (`.env`, `.local/`, `data/`, `artifacts/`) sont exclus de Git ou du contexte Docker. Les données de la version locale ne sont pas copiées dans l’image.
 
+Pour importer Kandiskey et Chords, envoyer aussi `scripts/add-agency-apps.mjs`, `public/media/kandiskey.webp`, `public/media/chords.webp` et les modifications du `Dockerfile` et de `src/server.js` au dépôt utilisé par Coolify. Redéployer cette version, puis exécuter `node /app/scripts/add-agency-apps.mjs` dans le terminal du service app. L’import conserve les fiches existantes. Une erreur `Cannot find module '/app/scripts/add-agency-apps.mjs'` indique que le conteneur actif ne contient pas encore ce script : vérifier la version déployée et reconstruire l’image avant de relancer la commande.
+
 Le fichier `compose.yaml` concerne l’installation autonome avec Caddy ; sélectionner explicitement **`compose.coolify.yaml`** dans Coolify.
 
 ## 2. Domaine

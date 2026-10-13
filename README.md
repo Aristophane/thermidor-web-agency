@@ -30,6 +30,8 @@ Les clients sont initialisés une seule fois dans `data/thermidor.sqlite`. Les m
 
 Les clients existants restent dans la table `projects`. La table `apps`, indépendante et vide au départ, est créée automatiquement au démarrage. Les pages publiques sont `/clients`, `/en/clients`, `/apps` et `/en/apps`, avec une page de détail par fiche publiée. Les anciennes adresses `/projets` et `/en/projects`, y compris leurs fiches, redirigent définitivement vers Clients. Les anciennes routes d’administration `/admin/projects` restent compatibles.
 
+Pour ajouter **Kandiskey** et **Chords** avec leurs présentations FR/EN, leurs liens et leurs captures WebP, exécuter `npm run apps:add`. Les deux fiches sont publiées et restent modifiables dans `/admin/apps`. L’import utilise `DATABASE_PATH` et conserve les fiches déjà présentes, y compris les brouillons. Après déploiement Docker, lancer une fois `docker compose exec app node scripts/add-agency-apps.mjs` (avec Coolify, exécuter `node scripts/add-agency-apps.mjs` dans le terminal du service app). Les données locales ne sont pas transférées automatiquement au serveur.
+
 Les anciens fichiers images non utilisés ne sont pas chargés par le nouveau site. Les médias importés ne sont pas supprimés automatiquement lors de la suppression d’un projet, pour éviter de casser une image réutilisée. Prévoir un nettoyage périodique des fichiers orphelins si nécessaire.
 
 ## Emails de contact

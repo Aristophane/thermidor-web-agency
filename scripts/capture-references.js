@@ -8,6 +8,8 @@ for (const [name, url, project] of [
   ['morez', 'https://morez.co/', false], ['daima', 'https://wearedaima.framer.website/', false],
   ['ignite', 'https://igniteagency.com/', false], ['oroya', 'https://www.oroya.fr/', false],
   ['snv', 'https://www.snv-vetements-pro.fr/', true], ['maison-charlet', 'https://maisoncharlet.fr/', true], ['junaki', 'https://junaki.fr/', true],
+  ['kandiskey', 'https://kandiskey.thermidor-agence-web.fr/tooltovisualisemusic.html', true],
+  ['chords', 'https://chords.thermidor-agence-web.fr/', true],
   ['thermidor-original', 'https://thermidor-agence-web.fr/', false]
 ]) {
   if (process.argv[2] && !process.argv.slice(2).includes(name)) continue;

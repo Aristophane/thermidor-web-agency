@@ -207,7 +207,7 @@ export function validateProject(body, uploadDir) {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(p.slug)) throw new Error('L’adresse doit contenir uniquement des lettres minuscules, des chiffres et des tirets.');
   let url; try { url = new URL(p.url); } catch { throw new Error('Le lien du site est invalide.'); }
   if (url.protocol !== 'https:' || url.username || url.password) throw new Error('Le lien doit commencer par https:// et ne pas contenir d’identifiants.');
-  const builtIns = ['/media/snv.webp', '/media/maison-charlet.webp', '/media/junaki.webp', '/media/project-placeholder.svg'];
+  const builtIns = ['/media/snv.webp', '/media/maison-charlet.webp', '/media/junaki.webp', '/media/kandiskey.webp', '/media/chords.webp', '/media/project-placeholder.svg'];
   if (!builtIns.includes(p.image) && (!/^\/uploads\/[a-f0-9]{32}\.webp$/.test(p.image) || !existsSync(join(uploadDir, p.image.split('/').at(-1))))) throw new Error('Importez une image valide avant d’enregistrer.');
   if (!['0', '1'].includes(String(body.published))) throw new Error('Statut de publication invalide.');
   p.position = Number(body.position); if (!Number.isInteger(p.position) || p.position < 0 || p.position > 9999) throw new Error('L’ordre doit être un entier compris entre 0 et 9999.');

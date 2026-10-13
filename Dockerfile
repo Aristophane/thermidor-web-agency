@@ -6,6 +6,7 @@ RUN npm ci --omit=dev && npm cache clean --force
 COPY --chown=node:node src ./src
 COPY --chown=node:node public ./public
 COPY --chown=node:node scripts/admin-password.js ./scripts/admin-password.js
+COPY --chown=node:node scripts/add-agency-apps.mjs ./scripts/add-agency-apps.mjs
 RUN mkdir -p /app/data /app/public/uploads && chown -R node:node /app/data /app/public/uploads
 USER node
 EXPOSE 3000
