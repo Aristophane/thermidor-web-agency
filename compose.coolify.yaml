@@ -24,7 +24,9 @@ services:
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
       GOOGLE_ADMIN_EMAIL: ${GOOGLE_ADMIN_EMAIL:-}
-      SESSION_SECRET: ${SESSION_SECRET:?}
+      # Coolify builds without runtime-only secrets. The server requires a
+      # 32-character SESSION_SECRET at startup in production.
+      SESSION_SECRET: ${SESSION_SECRET:-}
       SMTP_HOST: ${SMTP_HOST:-}
       SMTP_PORT: ${SMTP_PORT:-587}
       SMTP_SECURE: ${SMTP_SECURE:-false}
